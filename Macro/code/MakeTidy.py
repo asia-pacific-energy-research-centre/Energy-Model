@@ -18,8 +18,17 @@ Pop7th = pd.melt(rawPop7th, id_vars='Economy', value_vars=year_list)
 Pop7th.rename(columns={'variable':'Year','value':'Population'}, inplace=True)
 
 GDP7th = pd.melt(rawGDP7th, id_vars='Economy', value_vars=year_list)
-GDP7th.rename(columns={'variable':'Year','value':'Population'}, inplace=True)
+GDP7th.rename(columns={'variable':'Year','value':'GDP'}, inplace=True)
 
-# write to csv
+# separate historical and future
+# store all values up up to, and including, 2016 in one dataframe
+GDP7thHistorical = GDP7th[GDP7th.Year <= 2016].reset_index(drop=True)
+GDP7thFuture = GDP7th[GDP7th.Year > 2016].reset_index(drop=True)
+Pop7thHistorical = Pop7th[Pop7th.Year <= 2016].reset_index(drop=True)
+Pop7thFuture = Pop7th[Pop7th.Year > 2016].reset_index(drop=True)
+
+# write all dataframes to csv
 Pop7th.to_csv(r'data\results\Pop7th.csv', index=False)
 GDP7th.to_csv(r'data\results\GDP7th.csv', index=False)
+Pop7thHistorical.to_csv(r'data\results\Pop7thHistorical.csv', index=False)
+GDP7thFuture.to_csv(r'data\results\GDP7thFuture.csv', index=False)
