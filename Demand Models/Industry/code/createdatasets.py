@@ -14,3 +14,7 @@ Pop7thHistorical = pd.read_csv(r'C:\GitHub\Energy-Model\SharedData\Pop7thHistori
 SteelHistorical = pd.merge(GDP7thHistorical, TidySteel, how='left', on=['Economy','Year'])
 SteelHistorical = pd.merge(SteelHistorical,Pop7thHistorical,how='left',on=['Economy','Year'])
 
+# remove negative numbers and NaNs
+SteelHistorical[SteelHistorical.SteelProduction < 0] = np.NaN
+SteelHistorical.dropna(inplace=True)
+
