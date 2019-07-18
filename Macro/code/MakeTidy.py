@@ -28,7 +28,7 @@ Pop7thHistorical = Pop7th[Pop7th.Year <= 2016].reset_index(drop=True)
 Pop7thFuture = Pop7th[Pop7th.Year > 2016].reset_index(drop=True)
 
 # write all dataframes to csv
-Pop7th.to_csv(r'data\results\Pop7th.csv', index=False)
-GDP7th.to_csv(r'data\results\GDP7th.csv', index=False)
 Pop7thHistorical.to_csv(r'data\results\Pop7thHistorical.csv', index=False)
+Pop7thFuture.to_csv(r'data\results\Pop7thFuture.csv', index=False)
+GDP7thHistorical.to_csv(r'data\results\GDP7thHistorical.csv', index=False)
 GDP7thFuture.to_csv(r'data\results\GDP7thFuture.csv', index=False)
