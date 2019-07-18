@@ -23,3 +23,7 @@ GDP7thFuture = pd.read_csv(r'C:\GitHub\Energy-Model\SharedData\GDP7thFuture.csv'
 Pop7thFuture = pd.read_csv(r'C:\GitHub\Energy-Model\SharedData\Pop7thFuture.csv')
 
 GDPPop7thFuture = pd.merge(GDP7thFuture,Pop7thFuture,how='left',on=['Economy','Year']).dropna()
+
+# save dataframes to csv
+SteelHistorical.to_csv(r'data\modified\SteelHistorical.csv', index=False)
+GDPPop7thFuture.to_csv(r'data\modified\GDPPop7thFuture.csv', index=False)
