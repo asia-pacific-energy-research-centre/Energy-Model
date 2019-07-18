@@ -17,3 +17,8 @@ SteelHistorical['lnGDPpercap'] = np.log(SteelHistorical['GDPpercap'])
 SteelHistorical['lnProdpercap'] = np.log(SteelHistorical['Prodpercap'])
 
 GDPPop7thFuture['GDPpercap'] = GDPPop7thFuture['GDP'].div(GDPPop7thFuture['Population'])
+GDPPop7thFuture['lnGDPpercap'] = np.log(GDPPop7thFuture['GDPpercap'])
+
+# write prepared data to csv
+SteelHistorical.to_csv(r'data\modified\SteelHistoricalPrepared.csv', index=False)   
+GDPPop7thFuture.to_csv(r'data\modified\GDPPop7thFuturePrepared.csv', index=False)
