@@ -18,3 +18,8 @@ SteelHistorical = pd.merge(SteelHistorical,Pop7thHistorical,how='left',on=['Econ
 SteelHistorical[SteelHistorical.SteelProduction < 0] = np.NaN
 SteelHistorical.dropna(inplace=True)
 
+# combine future GDP and population, drop the world value
+GDP7thFuture = pd.read_csv(r'C:\GitHub\Energy-Model\SharedData\GDP7thFuture.csv')
+Pop7thFuture = pd.read_csv(r'C:\GitHub\Energy-Model\SharedData\Pop7thFuture.csv')
+
+GDPPop7thFuture = pd.merge(GDP7thFuture,Pop7thFuture,how='left',on=['Economy','Year']).dropna()
