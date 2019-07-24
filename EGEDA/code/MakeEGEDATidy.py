@@ -30,12 +30,15 @@ for sheet, dataframe in RawEGEDA.items():
         # rename blank columns
         RawEGEDA[sheet].rename(columns={'Unnamed: 0':'Product Number','Unnamed: 1':'Item Number', 'Unnamed: 2':'Product Code','Unnamed: 3':'Item Code'}, inplace=True)
         
-        # using melt to make a tidy set with multiple measured variables - see Table 12 in Tidy Data paper
-        df_name = pd.melt(RawEGEDA[sheet],id_vars=['Product Number','Item Number','Product Code','Item Code'],value_vars=years)
-        df_name.rename(columns={'variable':'Year','value':'Energy'}, inplace=True)
-
+        # Make Item Code Columns
+        df_name = (RawEGEDA[sheet].set_index(['Product Number','Item Number', 'Product Code', 'Item Code'])
+                  .rename_axis(['Year'], axis=1)
+                  .stack().unstack('Item Code')
+                  .reset_index())
+ 
         # create column with economy name
         df_name['Economy'] = sheet
+
         df_list.append(df_name)
 
 # combine individual economy dataframes to one dataframe
@@ -66,3 +69,5 @@ dfResults['APERC'] = np.NaN
 
 # write to csv
 dfResults.to_csv(r'data\modified\TidyEGEDA.csv', index=False)
+
+
