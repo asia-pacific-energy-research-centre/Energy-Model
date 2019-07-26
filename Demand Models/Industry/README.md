@@ -1,4 +1,4 @@
-# Industry model
+# Steel model
 
 ## Contents
 This folder contains the code and data to run the steel model.
