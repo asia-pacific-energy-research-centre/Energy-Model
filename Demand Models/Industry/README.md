@@ -5,8 +5,9 @@ This folder contains the code and data to run the steel model.
 
 ### code folder
 The code runs in the following order
+
 #### 1.MakeTidy.py
--Reshape steel production data in Tidy format
+- Reshape steel production data in Tidy format
 #### 2.createdatasets.py
 - Combine historical steel production, historical GDP and historical population to one file and remove negative numbers
 - Combine GDP and population projection data to one file
@@ -19,10 +20,10 @@ The code runs in the following order
 - Plot production per capita result for all economies 
 
 ### data folder
-#### raw
+#### 1.raw
 - *IS_production7th.csv*
   Steel historical production data from 7th Edition
-#### modified
+#### 2.modified
 - *TidySteel.csv* 
   Steel historical production data from 7th Edition in Tidy format
 - *SteelHistorical.csv*
@@ -37,7 +38,7 @@ The code runs in the following order
 - *XX_EconomyPrediction.csv*
   Projected production per capita and with natural logs
   Projected GDP per capita for 21 economies
-#### results
+#### 3.results
 - *HistoricalPredictionResults.csv*
   Historical production per capita and with natural logs
   Historical GDP per capita
@@ -49,5 +50,3 @@ The code runs in the following order
   Historical GDP per capita
   Projected production per capita and with natural logs
   Projected GDP per capita
-
-end
