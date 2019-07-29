@@ -3,23 +3,18 @@
 ## IMPORTANT
 ***Remember to create your own branch before you start making edits!!!***
 
-When you are ready to share your changes, _push_ your branch then make _Pull Request_.
+How to use and make edits:
+1. In GitHub Desktop, create a new branch - *do not make changes to 'development'!*
+2. Open the Energy-Model folder in your text editor.
+3. When you are ready to share your changes, _push_ your branch then make a _Pull Request_.
+4. Someone will review your changes.
+5. If there are no issues, the changes will be merged.
 
-## Contents
-This repository contains the data and code to run the [APERC](https://aperc.ieej.or.jp/) Energy Model.
-
+## Folder contents
 Folders are structured by type of analysis:
 1. Macro
 2. EGEDA
 3. Demand
-
-There is a shared data folder for putting final datasets that all models can use. Think of it as the "integration" folder from the 7th. 
-
-#### Shared Data
-The following data series are stored here for use in the other models:
-- GDP (historical and projected)
-- Population
-- Other?
 
 #### 1. Macro
 This model supplies the GDP projections.
