@@ -7,48 +7,55 @@ This folder contains the code and data to run the steel model.
 The code runs in the following order
 
 #### 1.MakeTidy.py
-- Reshape steel production data in Tidy format
+- Reshape steel consumption data in Tidy format.
 #### 2.createdatasets.py
-- Combine historical steel production, historical GDP and historical population to one file and remove negative numbers
-- Combine GDP and population projection data to one file
+- Combine historical steel consumption, GDP and population to one file and remove negative numbers.
+- Combine projected GDP and population to one file.
 #### 3.ComputeFeatures.py
-- Compute historical GDP per capita, production per capita and take natural logs for regression
-- Compute projected GDP per capita and take natural logs for regression
+- Compute historical GDP per capita, consumption per capita and take natural logs for regression.
+- Compute projected GDP per capita and take natural logs for regression.
 #### 4.RunRegressions.py
-- Project production per capita with linear regression of historical production per capita and GDP per capita
-- Run regression for all economies
-- Plot production per capita result for all economies 
+- Compute projected consumption per capita with linear regression of historical consumption per capita and historical GDP per capita.
+- Run regression for all economies.
+- Plot historical and projected consumption per capita result for all economies.
 
 ### data folder
+Each file has data for all economies unless else specified.
+
 #### 1.raw
-- *IS_production7th.csv*
-  Steel historical production data from 7th Edition
+- *IS_consumption7th.csv*
+  - Historical steel consumption data from 7th Edition
 #### 2.modified
 These files are created from running the code1-4.
 - *TidySteel.csv* 
-  Steel historical production data from 7th Edition in Tidy format
+  - Historical steel consumption data from 7th Edition in Tidy format
 - *SteelHistorical.csv*
-  Steel historical production, historical GDP and historical population data
+  - Historical steel consumption, GDP and population data
 - *GDPPop7thFuture.csv*
-  GDP projection and population projection data
+  - Projected GDP and population data
 - *SteelHistoricalPrepared.csv*
-  Historical GDP per capita, historical production per capita
-  Historical GDP per capita with natural logs, historical production per capita with natural logs
+  - Historical steel consumption, GDP and population
+  - Historical GDP per capita and with natural logs
+  - Historical consumption per capita and with natural logs
 - *GDPPop7thFuturePrepared.csv*
-  GDP per capita projection and GDP per capita with natural logs projection
-- *XX_EconomyPrediction.csv*
-  Projected production per capita and with natural logs
-  Projected GDP per capita for 21 economies
+  - Projected GDP and population data
+  - Projected GDP per capita and with natural logs
+  - Projected population per capita and with natural logs
+- *XX_EconomyPrediction.csv* 
+  - 19 projection files are created for each economy: 01_AUS to 21_VN (Note: 02_BD and 13_PNG are excluded because of data unavailability
+  - Projected GDP per capita and with natural logs
+  - Projected consumption per capita and with natural logs
 #### 3.results
 These files are created from running the code4.
 - *HistoricalPredictionResults.csv*
-  Historical production per capita and with natural logs
-  Historical GDP per capita
+  - Historical GDP per capita
+  - Historical consumption per capita and with natural logs
 - *FutureProjectionResults.csv*
-  Projected production per capita and with natural logs
-  Projected GDP per capita
+  - Projected GDP per capita
+  - Projected consumption per capita and with natural logs
 - *SteelResultsCombined.csv*
-  Historical production per capita and with natural logs
-  Historical GDP per capita
-  Projected production per capita and with natural logs
-  Projected GDP per capita
+  - Historical GDP per capita
+  - Historical consumption per capita and with natural logs
+  - Projected GDP per capita
+  - Projected consumption per capita and with natural logs
+  
