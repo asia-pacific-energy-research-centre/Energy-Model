@@ -1,4 +1,5 @@
 # MakeTidy.py
+
 # Take EGEDA 2016 data and reshape in Tidy format
 # https://stackoverflow.com/questions/45066873/pandas-melt-with-multiple-value-vars
 
@@ -31,7 +32,7 @@ for sheet, dataframe in RawEGEDA.items():
         RawEGEDA[sheet].rename(columns={'Unnamed: 0':'Product Number','Unnamed: 1':'Item Number', 'Unnamed: 2':'Product Code','Unnamed: 3':'Item Code'}, inplace=True)
         
         # Make Item Code Columns
-        df_name = (RawEGEDA[sheet].set_index(['Product Number','Item Number', 'Product Code', 'Item Code'])
+        df_name = (RawEGEDA[sheet].drop(['Product Number', 'Item Number'], axis=1).set_index(['Product Code', 'Item Code'])
                   .rename_axis(['Year'], axis=1)
                   .stack().unstack('Item Code')
                   .reset_index())
@@ -42,11 +43,32 @@ for sheet, dataframe in RawEGEDA.items():
         df_list.append(df_name)
 
 # combine individual economy dataframes to one dataframe
-dfResults = pd.concat(df_list).reset_index(drop=True)
+dfResults = pd.concat(df_list, sort=True).reset_index(drop=True)
 
-# remove x and X placeholders with NaNs
-# code..
-# code..
+# replace x and X placeholders with NaNs
+dfResults = dfResults.replace('x', np.NaN)
+dfResults = dfResults.replace('X', np.NaN)
+
+# Rearrange Columns
+# dfResults = dfResults.reindex_axis(['Year'] + list(dfResults.columns[:-1]), axis=1)
+# dfResults = dfResults.reindex_axis(['Economy'] + list(dfResults.columns[:-1]), axis=1)
+
+# Make a list
+dfList = dfResults[['Economy', 'Year', 'Product Code', '01. Indigenous Production', '02. Imports', 
+        '03. Exports', '04. International Marine Bunkers', '05. Intarnational Aviation Bunkers',
+         '06. Stock Changes', '07. Total Primary Energy Supply', '08. Transfers', 
+         '09. Total Transformation Sector', '09.01 Main Activity Producer', '09.02 Autoproducers', 
+         '09.03 Gas Processing', '09.04 Refineries', '09.05Coal Transformation', '09.06 Petrochemical Industry', 
+         '09.07 Biofuel Processing', '09.08 Charcoal Processing', '09.09 Non-specified Transformation', 
+         '10. Loss & Own Use', '11. Discrepancy', 'Total Final Consumption', '12. Total Final Energy Consumptions', 
+         '13. Industry Sector', '14. Transport Sector', '14.01 Domestic Air Transport', '14.02 Road', 
+         '14.03 Rail', '14.04 Inland Waterways', '14.05 Pipeline Transport', '14.06 Non-specified Transport', 
+         '15. Other Sector', '15.1 Residential & Commercial', '15.1.1 Commerce and Public Services', 
+         '15.1.2 Residential ', '15.2 Agriculture', '15.3 Fishing', '15.4 Non-specified Others', 
+         '16. of which Non-Energy Use', '16.1 Transformation Sector', '16.2 Industry Sector', 
+         '16.3 Transport Sector', '16.4 Other Sector', '17. Electricity Output in GWh', 
+         '18. Heat Output in TJ']]
+
 
 # replace economy names
 # rename economies
