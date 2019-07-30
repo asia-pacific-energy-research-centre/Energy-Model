@@ -12,6 +12,8 @@ Demand Models\Transport\data\results
 EGEDA\data\modified
 EGEDA\data\results
 
+World Bank\WB_data_tidy.csv
+
 # GAMS 
 ## Do not track temp files:
 *.gpr
