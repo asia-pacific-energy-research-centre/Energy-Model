@@ -14,6 +14,8 @@ EGEDA/data/results
 
 Platts/data/
 
+World*Bank/modified
+
 # GAMS 
 ## Do not track temp files:
 *.gpr
