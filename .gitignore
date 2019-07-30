@@ -1,16 +1,20 @@
 # do not track data files created during runs. 
 # These should be recreated when needed using the scripts.
-Demand Models\Industry\data\modified
-Demand Models\Industry\data\results
+Demand Models/Industry/data/modified/
+Demand Models/Industry/data/results
 
-Demand Models\Buildings\data\modified
-Demand Models\Buildings\data\results
+Demand Models/Buildings/data/modified
+Demand Models/Buildings/data/results
 
-Demand Models\Transport\data\modified
-Demand Models\Transport\data\results
+Demand Models/Transport/data/modified
+Demand Models/Transport/data/results
 
-EGEDA\data\modified
-EGEDA\data\results
+EGEDA/data/modified
+EGEDA/data/results
+
+Platts/data/
+
+World*Bank/modified
 
 # GAMS 
 ## Do not track temp files:

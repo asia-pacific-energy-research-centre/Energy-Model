@@ -1,12 +1,24 @@
+# Worldbank_Cleaner.py
 
 # Import tools
 import pandas as pd
 import re
 import numpy as np
+import os
 desired_width=320
 
-input_file_name = "WB_DATA_example.csv"
-output_file_name = "wb_data_tidy_example.csv"
+# create modified data directory
+path = "World Bank/modified"
+try:
+    os.mkdir(path)
+except OSError:
+    print ("Creation of the directory %s failed" % path)
+else:
+    print ("Successfully created the directory %s " % path)
+
+
+input_file_name = 'World Bank\data\raw\WB_DATA_raw.csv'
+output_file_name = 'World Bank\data\modified\WB_data_tidy.csv'
 
 pd.set_option('display.width', desired_width)
 pd.set_option('display.max_columns',10)
@@ -24,6 +36,7 @@ for coloumn in wb_coloumns:
     for num in coloumn:
         if num.isdigit() and coloumn_cleen not in wb_coloumns_years:
             wb_coloumns_years.append(coloumn_cleen)
+
 # replace columns names with cleaned up names
 wb_data = wb_data.set_axis(wb_coloumns_cleen, axis=1, inplace=False)
 
@@ -47,9 +60,9 @@ wb_melt_years.set_index(keys=(list(wb_melt_years.columns)[:-1]), inplace = True)
 wb_data_tidy = wb_melt_years.unstack("Series Name")
 wb_data_tidy.reset_index(inplace= True, col_level=1)
 wb = wb_data_tidy.drop([0],axis= 0)
+wb.columns = wb.columns.droplevel()
 
-print(wb.head(0))
-
+# write tidy data to csv
 wb.to_csv(output_file_name)
 
 
