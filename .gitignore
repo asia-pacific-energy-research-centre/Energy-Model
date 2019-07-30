@@ -16,6 +16,9 @@ Platts/data/
 
 World*Bank/modified
 
+Macro/data/modified
+Macro/data/results
+
 # GAMS 
 ## Do not track temp files:
 *.gpr

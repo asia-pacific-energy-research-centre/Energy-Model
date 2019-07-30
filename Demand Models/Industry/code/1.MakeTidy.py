@@ -5,7 +5,19 @@
 # import math and data table functions
 import numpy as np
 import pandas as pd
+import os
 
+# create directories for modified and results data
+paths = {'path1':'Demand Models/Industry/data/modified','path2':'Demand Models/Industry/data/results'}
+for key, value in paths.items(): 
+        try:
+            os.makedirs(value)
+        except OSError:
+            print ("Creation of the directory %s failed" % key)
+        else:
+            print ("Successfully created the directory %s " % key)
+
+# read in raw steel data
 RawSteelData = pd.read_csv(r'Demand Models\Industry\data\raw\IS_consumption7th.csv')
 RawSteelData.head()
 
