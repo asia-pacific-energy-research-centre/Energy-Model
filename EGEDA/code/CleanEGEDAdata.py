@@ -139,16 +139,37 @@ EconomyNames = {
         'VNM':'VN'}
 
 # code to replace economy abbreviations
-# --code here--
+dfResults.replace(EconomyNames, inplace=True)
 
 # create dictionary of Product Code and APERC code
-APERCcodes = {
+FUELcodes = {
+        '01. Coal':'Coal',
         '02. Coal Products':'CoalP',
-        '03. Crude Oil & NGL':'OilP'
-        # and so on...
+        '03. Crude Oil & NGL':'Oil',
+        '04. Petroleum Products':'PetP',
+        '04.01 Motor Gasoline   ':'PetPG',   
+        '04.02 Naphtha':'PetPN',
+        '04.03 Jet Fuel':'PetPJ',
+        '04.04 Kerosene':'PetPK',
+        '04.05 Gas/Diesel Oil ':'PetPD',
+        '04.06 Fuel Oil':'PetPF',
+        '04.07 LPG':'PetPL',
+        '04.08 Refinery Gas':'PetPR',
+        '04.09 Ethane':'PetPE',
+        '04.10 Other Petroleum Products':'PetPO',
+        '05. Gas':'Gas',
+        '06. Hydro':'RenH',
+        '07. Nuclear':'Nuc',
+        '08. Geothermal, Solar etc.':'RenNRE',
+        '09. Others':'Oth',
+        '10. Electricity':'Elec',
+        '11. Heat':'Heat',
+        '12. Total':'Tot'
+# need further details to match the full EGEDA's dataset         
         }
 
-#dfResults.replace(APERCcodes, inplace=True)
+# code to replace fuel abbreviations
+dfResults.replace(FUELcodes, inplace=True)
 
 # write to csv
 dfResults.to_csv(r'EGEDA\data\results\TidyEGEDA.csv', index=False)
