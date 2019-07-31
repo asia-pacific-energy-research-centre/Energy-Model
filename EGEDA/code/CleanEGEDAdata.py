@@ -160,12 +160,13 @@ FUELcodes = {
         '05. Gas':'Gas',
         '06. Hydro':'RenH',
         '07. Nuclear':'Nuc',
+# this code (RenNRE) will be made redundant
         '08. Geothermal, Solar etc.':'RenNRE',
         '09. Others':'Oth',
         '10. Electricity':'Elec',
         '11. Heat':'Heat',
         '12. Total':'Tot'
-# need further details to match the full EGEDA's dataset         
+# need further details to match the full EGEDA's dataset
         }
 
 # code to replace fuel abbreviations
