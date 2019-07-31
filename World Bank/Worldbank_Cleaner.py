@@ -12,13 +12,13 @@ path = "World Bank/modified"
 try:
     os.mkdir(path)
 except OSError:
-    print ("Creation of the directory %s failed" % path)
+    print ("%s already exists. It's OK." % path)
 else:
     print ("Successfully created the directory %s " % path)
 
 
-input_file_name = 'World Bank\data\raw\WB_DATA_raw.csv'
-output_file_name = 'World Bank\data\modified\WB_data_tidy.csv'
+input_file_name = 'World Bank/raw/WB_DATA_raw.csv'
+output_file_name = 'World Bank/modified/WB_data_tidy.csv'
 
 pd.set_option('display.width', desired_width)
 pd.set_option('display.max_columns',10)
@@ -27,18 +27,18 @@ pd.set_option('display.max_columns',10)
 wb_data = pd.read_csv(input_file_name)
 
 # clean up the column names and make a list of all years in the series
-wb_coloumns = (list(wb_data.columns))
-wb_coloumns_cleen = []
-wb_coloumns_years = []
-for coloumn in wb_coloumns:
-    coloumn_cleen = re.sub(r"\[.*\]", "", coloumn).strip()
-    wb_coloumns_cleen.append(coloumn_cleen)
+wb_columns = (list(wb_data.columns))
+wb_columns_clean = []
+wb_columns_years = []
+for coloumn in wb_columns:
+    column_clean = re.sub(r"\[.*\]", "", coloumn).strip()
+    wb_columns_clean.append(column_clean)
     for num in coloumn:
-        if num.isdigit() and coloumn_cleen not in wb_coloumns_years:
-            wb_coloumns_years.append(coloumn_cleen)
+        if num.isdigit() and column_clean not in wb_columns_years:
+            wb_columns_years.append(column_clean)
 
 # replace columns names with cleaned up names
-wb_data = wb_data.set_axis(wb_coloumns_cleen, axis=1, inplace=False)
+wb_data = wb_data.set_axis(wb_columns_clean, axis=1, inplace=False)
 
 # list all unique series in the data set
 unique_series_names = wb_data["Series Name"].unique()
@@ -51,7 +51,7 @@ for string in columns_add:
 #print(unique_series_names_list)
 
 # make years a single a single column
-wb_melt_years = pd.melt(wb_data, id_vars =['Country Name','Country Code','Series Name'], value_vars=wb_coloumns_years,
+wb_melt_years = pd.melt(wb_data, id_vars =['Country Name','Country Code','Series Name'], value_vars=wb_columns_years,
                         var_name='Year')\
     .dropna()
 
@@ -64,9 +64,3 @@ wb.columns = wb.columns.droplevel()
 
 # write tidy data to csv
 wb.to_csv(output_file_name)
-
-
-
-
-
-
