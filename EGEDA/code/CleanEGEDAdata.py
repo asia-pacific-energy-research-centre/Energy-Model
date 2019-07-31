@@ -24,9 +24,9 @@ for key, value in paths.items():
         try:
             os.makedirs(value)
         except OSError:
-            print ("Creation of the directory %s failed" % key)
+            print ("%s already exists. It's OK" % value)
         else:
-            print ("Successfully created the directory %s " % key)
+            print ("Successfully created %s " % value)
 
 # read all sheets from EGEDA spreadsheet to Pandas dictionary.
 # `sheet_name = none` means the output will be a dictionary that contains a key for each economy, 
@@ -62,55 +62,59 @@ dfResults = dfResults.replace('X', np.NaN)
 
 # Make a list of Item Codes
 # note that 15.1.2 has whitespace after the text
-ItemCodeList = [
-         '01. Indigenous Production', 
-         '02. Imports', 
-         '03. Exports', 
-         '04. International Marine Bunkers', 
-         '05. Intarnational Aviation Bunkers',
-         '06. Stock Changes', 
-         '07. Total Primary Energy Supply', 
-         '08. Transfers', 
-         '09. Total Transformation Sector', 
-         '09.01 Main Activity Producer', 
-         '09.02 Autoproducers', 
-         '09.03 Gas Processing', 
-         '09.04 Refineries', 
-         '09.05Coal Transformation', 
-         '09.06 Petrochemical Industry', 
-         '09.07 Biofuel Processing', 
-         '09.08 Charcoal Processing', 
-         '09.09 Non-specified Transformation', 
-         '10. Loss & Own Use', 
-         '11. Discrepancy', 'Total Final Consumption', 
-         '12. Total Final Energy Consumptions', 
-         '13. Industry Sector', 
-         '14. Transport Sector', 
-         '14.01 Domestic Air Transport', 
-         '14.02 Road', 
-         '14.03 Rail', 
-         '14.04 Inland Waterways', 
-         '14.05 Pipeline Transport', 
-         '14.06 Non-specified Transport', 
-         '15. Other Sector', 
-         '15.1 Residential & Commercial', 
-         '15.1.1 Commerce and Public Services', 
-         '15.1.2 Residential ', 
-         '15.2 Agriculture', 
-         '15.3 Fishing', 
-         '15.4 Non-specified Others', 
-         '16. of which Non-Energy Use', 
-         '16.1 Transformation Sector', 
-         '16.2 Industry Sector', 
-         '16.3 Transport Sector', 
-         '16.4 Other Sector', 
-         '17. Electricity Output in GWh', 
-         '18. Heat Output in TJ']
+dfResults = dfResults[['Economy', 
+    'Year', 'Product Code', 
+    '01. Indigenous Production', 
+    '02. Imports', 
+    '03. Exports', 
+    '04. International Marine Bunkers', 
+    '05. Intarnational Aviation Bunkers',
+    '06. Stock Changes', 
+    '07. Total Primary Energy Supply', 
+    '08. Transfers', 
+    '09. Total Transformation Sector', 
+    '09.01 Main Activity Producer', 
+    '09.02 Autoproducers', 
+    '09.03 Gas Processing', 
+    '09.04 Refineries', 
+    '09.05Coal Transformation', 
+    '09.06 Petrochemical Industry', 
+    '09.07 Biofuel Processing', 
+    '09.08 Charcoal Processing', 
+    '09.09 Non-specified Transformation', 
+    '10. Loss & Own Use', 
+    '11. Discrepancy', 
+    'Total Final Consumption', 
+    '12. Total Final Energy Consumptions', 
+    '13. Industry Sector', 
+    '14. Transport Sector', 
+    '14.01 Domestic Air Transport', 
+    '14.02 Road', 
+    '14.03 Rail', 
+    '14.04 Inland Waterways', 
+    '14.05 Pipeline Transport', 
+    '14.06 Non-specified Transport', 
+    '15. Other Sector', 
+    '15.1 Residential & Commercial', 
+    '15.1.1 Commerce and Public Services', 
+    '15.1.2 Residential ', 
+    '15.2 Agriculture', 
+    '15.3 Fishing', 
+    '15.4 Non-specified Others', 
+    '16. of which Non-Energy Use', 
+    '16.1 Transformation Sector', 
+    '16.2 Industry Sector', 
+    '16.3 Transport Sector', 
+    '16.4 Other Sector', 
+    '17. Electricity Output in GWh', 
+    '18. Heat Output in TJ']]
 
-# reorder the dataframe for ease of use
-dfResults = dfResults[['Economy', 'Year', 'Product Code', ItemCodeList]
+# fix typos
+typos = {'05. Intarnational Aviation Bunkers':'05. International Aviation Bunkers',
+    '15.1.2 Residential ':'15.1.2 Residential'}
+dfResults.rename(typos, axis='columns',inplace=True)
 
-# rename economies using APEC abbreviations
+# replace economies using APEC abbreviations
 EconomyNames = {
         'AUS':'AUS',
         'BRN':'BD',
@@ -129,12 +133,13 @@ EconomyNames = {
         'PHL':'RP',
         'RUS':'RUS',
         'SGP':'SIN',
-        'CT' :'CT',
+        'CT':'CT',
         'THA':'THA',
         'USA':'USA',
         'VNM':'VN'}
 
 # code to replace economy abbreviations
+# --code here--
 
 # create dictionary of Product Code and APERC code
 APERCcodes = {
@@ -147,5 +152,7 @@ APERCcodes = {
 
 # write to csv
 dfResults.to_csv(r'EGEDA\data\results\TidyEGEDA.csv', index=False)
+
+print('\n----FINISHED----')
 
 

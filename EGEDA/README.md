@@ -5,7 +5,7 @@ This folder contains EGEDA data and code to transform it to a form suitable for 
 
 ### code folder
 The code runs in the following order:
-1. MakeEGEDATidy.py
+1. CleanEGEDAdata.py
 
 #### 1.CleanEGEDAdata.py
 Reshape EGEDA data in Tidy format by:
@@ -13,6 +13,7 @@ Reshape EGEDA data in Tidy format by:
 - melting to Tidy Data
 - renaming economy abbreviations
 - replace 'x' and 'X' with NaN
+- fixed typos in Item Codes
 
 ### data folder
 Contains raw EGEDA data.
