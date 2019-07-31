@@ -7,7 +7,7 @@ This folder contains EGEDA data and code to transform it to a form suitable for 
 The code runs in the following order:
 1. MakeEGEDATidy.py
 
-#### 1.MakeEGEDATidy.py
+#### 1.CleanEGEDAdata.py
 Reshape EGEDA data in Tidy format by:
 - removing unnecessary columns
 - melting to Tidy Data
@@ -27,5 +27,7 @@ Contains raw EGEDA data.
 - removed summary rows at bottom of each sheet
 - removed miscellaneous calculations in row AP
 
+This file is used by *CleanEGEDAdata.py*
+
 #### 2.results
-*TidyEGEDA.csv* - EGEDA data after processing using *MakeEGEDATidy.py*.
+*TidyEGEDA.csv* - EGEDA data after processing using *CleanEGEDAdata.py*.
