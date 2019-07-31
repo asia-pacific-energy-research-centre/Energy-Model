@@ -16,7 +16,7 @@ except OSError:
 else:
     print ("Successfully created the directory %s " % path)
 
-
+# set file path names
 input_file_name = 'World Bank/raw/WB_DATA_raw.csv'
 output_file_name = 'World Bank/modified/WB_data_tidy.csv'
 
