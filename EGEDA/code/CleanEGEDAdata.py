@@ -1,6 +1,6 @@
-# MakeTidy.py
+# CleanEGEDAdata.py
 
-# Take EGEDA 2016 data and reshape in Tidy format
+# Take EGEDA 2016 data and reshape in Tidy format and clean
 # https://stackoverflow.com/questions/45066873/pandas-melt-with-multiple-value-vars
 
 # raw data file = APEC21_22Jul2019B_raw.xlsx
@@ -112,27 +112,27 @@ dfResults = dfResults[['Economy', 'Year', 'Product Code', ItemCodeList]
 
 # rename economies using APEC abbreviations
 EconomyNames = {
-        'AUS':'01_AUS',
-        'BRN':'02_BD',
-        'CAN':'03_CDA',
-        'CHL':'04_CHL',
-        'CHN':'05_PRC',
-        'HKG':'06_HKC',
-        'IDN':'07_INA',
-        'JPN':'08_JPN',
-        'KOR':'09_KOR',
-        'MAS':'10_MAS',
-        'MEX':'11_MEX',
-        'NZL':'12_NZ',
-        'PNG':'13_PNG',
-        'PER':'14_PE',
-        'PHL':'15_RP',
-        'RUS':'16_RUS',
-        'SGP':'17_SIN',
-        'CT':'18_CT',
-        'THA':'19_THA',
-        'USA':'20_USA',
-        'VNM':'21_VN'}
+        'AUS':'AUS',
+        'BRN':'BD',
+        'CAN':'CDA',
+        'CHL':'CHL',
+        'CHN':'PRC',
+        'HKG':'HKC',
+        'IDN':'INA',
+        'JPN':'JPN',
+        'KOR':'KOR',
+        'MAS':'MAS',
+        'MEX':'MEX',
+        'NZL':'NZ',
+        'PNG':'PNG',
+        'PER':'PE',
+        'PHL':'RP',
+        'RUS':'RUS',
+        'SGP':'SIN',
+        'CT' :'CT',
+        'THA':'THA',
+        'USA':'USA',
+        'VNM':'VN'}
 
 # code to replace economy abbreviations
 
