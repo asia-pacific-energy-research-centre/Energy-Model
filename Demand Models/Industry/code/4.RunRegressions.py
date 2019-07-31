@@ -26,25 +26,22 @@ def run_regression(models, economies, df):
 # create function for performing prediction and writing results
 # loop over economy-model pairs to make prediction and write prediction to csv, one for each economy
 def run_prediction(models, economies, years, df):
-        filelist = []
-        for economy, model in models.items():
-                prediction = model.predict(df.loc[economy,:])
-                results = years[years.Economy == economy]
-                results['prediction'] = prediction
-                results['Consumptionpercap'] = np.exp(prediction)
-                newfilename = '%sPrediction.csv' %economy
-                results.to_csv(r'Demand Models\Industry\data\modified\%s' %newfilename, header=True)
-                filelist.append(newfilename)
-
-        # read in all csv and combine to one df
         df_list =[]
-        for economy in economies:
-                newfilename = '%sPrediction.csv' %economy
-                df_list.append(pd.read_csv(r'Demand Models\Industry\data\modified\%s' %newfilename))
-        dfResults = pd.concat(df_list).drop('Unnamed: 0', axis=1)
-        dfResults['GDPpercap'] = SteelHistoricalPrepared['GDPpercap']
-#        dfResults.to_csv(r'data\results\SteelPredictionsAll.csv')
+        # run predictions
+        for economy, model in models.items():
+                prediction = model.predict(df.loc[economy])
+                df_name = pd.DataFrame(prediction, columns=['Future Steel Consumption'])
+                df_name['Economy'] = economy
+                df_list.append(df_name)
         
+        # combine individual economy dataframes to one dataframe
+        dfResults = pd.concat(df_list, sort=True).reset_index(drop=True)
+
+        # add year column
+        dfResults = pd.merge(dfResults,years,how='left', on='Economy')
+
+        # reorder columns
+        dfResults = dfResults[['Economy','Year','Future Steel Consumption']]
         return dfResults
 
 # define function to plot using matplotlib
