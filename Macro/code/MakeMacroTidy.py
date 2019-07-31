@@ -13,9 +13,9 @@ for key, value in paths.items():
         try:
             os.makedirs(value)
         except OSError:
-            print ("Creation of the directory %s failed" % key)
+            print ("%s already exists. It's OK." % value)
         else:
-            print ("Successfully created the directory %s " % key)
+            print ("Successfully created the directory %s " % value)
 
 # import from Excel
 rawPop7th = pd.read_excel(r'Macro\data\raw\Population_7th_2019_07_02 - raw.xlsx')

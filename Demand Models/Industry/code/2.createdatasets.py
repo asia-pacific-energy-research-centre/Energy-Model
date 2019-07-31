@@ -4,11 +4,16 @@
 # import math and data table functions
 import numpy as np
 import pandas as pd
+import sys
+
+# run Macro script to create Macro data
+sys.path.insert(0, 'Macro/code')
+import MakeMacroTidy
 
 # read data from csv and store as dataframe
 TidySteel = pd.read_csv(r'Demand Models\Industry\data\modified\TidySteel.csv')
-GDP7thHistorical = pd.read_csv(r'SharedData\GDP7thHistorical.csv')
-Pop7thHistorical = pd.read_csv(r'SharedData\Pop7thHistorical.csv')
+GDP7thHistorical = pd.read_csv(r'Macro\data\results\GDP7thHistorical.csv')
+Pop7thHistorical = pd.read_csv(r'Macro\data\results\Pop7thHistorical.csv')
 
 # combine datasets
 SteelHistorical = pd.merge(GDP7thHistorical, TidySteel, how='left', on=['Economy','Year'])
@@ -19,8 +24,8 @@ SteelHistorical[SteelHistorical.SteelConsumption < 0] = np.NaN
 SteelHistorical.dropna(inplace=True)
 
 # combine future GDP and population, drop the world value
-GDP7thFuture = pd.read_csv(r'SharedData\GDP7thFuture.csv')
-Pop7thFuture = pd.read_csv(r'SharedData\Pop7thFuture.csv')
+GDP7thFuture = pd.read_csv(r'Macro\data\results\GDP7thFuture.csv')
+Pop7thFuture = pd.read_csv(r'Macro\data\results\Pop7thFuture.csv')
 
 GDPPop7thFuture = pd.merge(GDP7thFuture,Pop7thFuture,how='left',on=['Economy','Year']).dropna()
 
