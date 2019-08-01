@@ -111,7 +111,8 @@ dfResults = dfResults[['Economy',
 
 # fix typos
 typos = {'05. Intarnational Aviation Bunkers':'05. International Aviation Bunkers',
-    '15.1.2 Residential ':'15.1.2 Residential'}
+         '09.05Coal Transformation':'09.05 Coal Transformation',
+         '15.1.2 Residential ':'15.1.2 Residential'}
 dfResults.rename(typos, axis='columns',inplace=True)
 
 # replace economies using APEC abbreviations
@@ -176,5 +177,3 @@ dfResults.replace(FUELcodes, inplace=True)
 dfResults.to_csv(r'EGEDA\data\results\TidyEGEDA.csv', index=False)
 
 print('\n----FINISHED----')
-
-
