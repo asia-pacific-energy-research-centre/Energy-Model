@@ -38,15 +38,15 @@ FutureX = (GDPPop7thFuturePrepared.set_index('Economy')
 # make predictions using historical values of GDP per capita
 HistoricalX = df1.drop('lnConspercap', axis=1)
 HistoricalPredictionResults = run_prediction(SteelRegressionModel, economies, HistoricalX)
-FutureProjectionResults = run_prediction(SteelRegressionModel, economies, FutureX)
+FuturePredictionResults = run_prediction(SteelRegressionModel, economies, FutureX)
 
 # plot historical and future predictions
-plot_results(economies, HistoricalPredictionResults, FutureProjectionResults)
+plot_results(economies, HistoricalPredictionResults, FuturePredictionResults)
 
 # combine results
-SteelResultsCombined = pd.concat([HistoricalPredictionResults,FutureProjectionResults])
+SteelResultsCombined = pd.concat([HistoricalPredictionResults,FuturePredictionResults])
 
 # write results to csv
 HistoricalPredictionResults.to_csv(r'Demand Models\Industry\data\results\HistoricalPredictionResults.csv', index=False)
-FutureProjectionResults.to_csv(r'Demand Models\Industry\data\results\FutureProjectionResults.csv', index=False)
+FuturePredictionResults.to_csv(r'Demand Models\Industry\data\results\FuturePredictionResults.csv', index=False)
 SteelResultsCombined.to_csv(r'Demand Models\Industry\data\results\SteelResultsCombined.csv', index=False)

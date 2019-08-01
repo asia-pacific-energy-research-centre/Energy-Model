@@ -8,9 +8,11 @@ The code runs in the following order:
 
 #### 1.MakeTidy.py
 - Reshape steel consumption data in Tidy format.
+- The `modified` and `results` folders are created by this script.
 #### 2.createdatasets.py
 - Combine historical steel consumption, GDP and population to one file and remove negative numbers.
 - Combine projected GDP and population to one file.
+- Runs `MakeMacroTidy.py` to generate the GDP and population datasets.
 #### 3.ComputeFeatures.py
 - Compute historical GDP per capita, consumption per capita and take natural logs for regression.
 - Compute projected GDP per capita and take natural logs for regression.
@@ -53,7 +55,7 @@ These files are created from running the code4.
 - *HistoricalPredictionResults.csv*
   - Historical GDP per capita
   - Historical consumption per capita and with natural logs
-- *FutureProjectionResults.csv*
+- *FuturePredictionResults.csv*
   - Projected GDP per capita
   - Projected consumption per capita and with natural logs
 - *SteelResultsCombined.csv*
