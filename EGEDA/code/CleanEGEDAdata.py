@@ -16,6 +16,9 @@
 import numpy as np
 import pandas as pd
 import os
+import datetime as dt
+
+print("Cleaning started. -- Current date/time:", dt.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
 
 # automatically create directories for modified and results data
 # these are not tracked in GitHub (see .gitignore)
@@ -24,7 +27,7 @@ for key, value in paths.items():
         try:
             os.makedirs(value)
         except OSError:
-            print ("%s already exists. It's OK" % value)
+            print (" ")
         else:
             print ("Successfully created %s " % value)
 
@@ -176,4 +179,4 @@ dfResults.replace(FUELcodes, inplace=True)
 # write to csv
 dfResults.to_csv(r'EGEDA\data\results\TidyEGEDA.csv', index=False)
 
-print('\n----FINISHED----')
+print("\nFINISHED. -- Current date/time:", dt.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
