@@ -58,10 +58,10 @@ def plot_results(economies, df1, df2):
 
         for economy,num in zip(economies, range(1,20)):
                 df11=df1[df1['Economy']==economy]
-                #df21=df2[df2['Economy']==economy]
+                df21=df2[df2['Economy']==economy]
                 ax = fig.add_subplot(7,3,num)
                 ax.plot(df11['Year'], df11[['Predicted Steel Consumption']],'r')
-                #ax.plot(df21['Year'], df21[['Predicted Steel Consumption']],'b')
+                ax.plot(df21['Year'], df21[['Predicted Steel Consumption']],'b')
                 ax.set_title(economy)
 
                 #plt.tight_layout()
@@ -81,15 +81,15 @@ models = {economy: LinearRegression() for economy in economies}
 
 # set Economy as index and set target vector by dropping all other columns except lnGDPpercap and lnConspercap
 df1 = (SteelHistoricalPrepared.set_index('Economy')
-                                 .drop(['GDP','SteelConsumption','Population','GDPpercap','Conspercap'], axis=1))
+       .drop(['GDP','SteelConsumption','Population','GDPpercap','Conspercap'], axis=1))
 
 # run regression
 SteelRegressionModel = run_regression(models, economies, df1)
 
 # make predictions using future values of GDP per capita
-FutureYears = GDPPop7thFuturePrepared[['Economy','Year']]
 FuturelnGDPpercap = (GDPPop7thFuturePrepared.set_index('Economy')
                                                    .drop(['GDP','Population','GDPpercap'], axis=1))     
+
 FutureProjectionResults = run_prediction(SteelRegressionModel, economies, FuturelnGDPpercap)
 #FutureProjectionResults.reset_index(drop=True).sort_values('Economy')
 
