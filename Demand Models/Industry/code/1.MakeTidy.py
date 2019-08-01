@@ -7,13 +7,15 @@ import numpy as np
 import pandas as pd
 import os
 
+print('Started\n')
+
 # create directories for modified and results data
 paths = {'path1':'Demand Models/Industry/data/modified','path2':'Demand Models/Industry/data/results'}
 for key, value in paths.items(): 
         try:
             os.makedirs(value)
         except OSError:
-            print ("%s already exists. It's OK." % value)
+            print (" ")
         else:
             print ("Successfully created the directory %s " % value)
 
@@ -27,3 +29,5 @@ TidySteel.rename(columns={'value':'SteelConsumption'}, inplace=True)
 
 # write to csv
 TidySteel.to_csv(r'Demand Models\Industry\data\modified\TidySteel.csv', index=False)
+
+print('Finished')

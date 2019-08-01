@@ -6,6 +6,8 @@ import numpy as np
 import pandas as pd
 import sys
 
+print('Started')
+
 # run Macro script to create Macro data
 sys.path.insert(0, 'Macro/code')
 import MakeMacroTidy
@@ -32,3 +34,5 @@ GDPPop7thFuture = pd.merge(GDP7thFuture,Pop7thFuture,how='left',on=['Economy','Y
 # save dataframes to csv
 SteelHistorical.to_csv(r'Demand Models\Industry\data\modified\SteelHistorical.csv', index=False)
 GDPPop7thFuture.to_csv(r'Demand Models\Industry\data\modified\GDPPop7thFuture.csv', index=False)
+
+print('Finished\n')

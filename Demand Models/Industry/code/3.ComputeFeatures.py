@@ -5,6 +5,8 @@
 import pandas as pd
 import numpy as np 
 
+print('Started\n')
+
 # read datasets from csv
 SteelHistorical = pd.read_csv(r'Demand Models\Industry\data\modified\SteelHistorical.csv')
 GDPPop7thFuture = pd.read_csv(r'Demand Models\Industry\data\modified\GDPPop7thFuture.csv')
@@ -22,3 +24,5 @@ GDPPop7thFuture['lnGDPpercap'] = np.log(GDPPop7thFuture['GDPpercap'])
 # write prepared data to csv
 SteelHistorical.to_csv(r'Demand Models\Industry\data\modified\SteelHistoricalPrepared.csv', index=False)   
 GDPPop7thFuture.to_csv(r'Demand Models\Industry\data\modified\GDPPop7thFuturePrepared.csv', index=False)
+
+print('Finished\n')
