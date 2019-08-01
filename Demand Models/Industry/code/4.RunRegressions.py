@@ -39,17 +39,18 @@ def run_prediction(models, economies, df):
 
         # add year column
         df_years = df.reset_index().sort_values(by=['Economy','Year']).reset_index(drop=True).drop(['lnGDPpercap'], axis=1)
-        #dfResults = pd.merge(dfResults,df_years,how='left', on='Economy')
+        df_merged = pd.merge(dfResults,df_years, how='left', left_index=True, right_index=True)
+        df_merged = df_merged.drop('Economy_y', axis=1)
 
         # reorder columns
-        #dfResults = dfResults[['Economy','Year','Predicted Steel Consumption']].reset_index(drop=True)
-        return dfResults
+        df_merged = df_merged[['Economy_x','Year','Predicted Steel Consumption']].reset_index(drop=True)
+        df_merged.rename(columns={'Economy_x':'Economy'}, inplace=True)
+        return df_merged
 
 # make predictions using historical values of GDP per capita
 #df3 = df1[['Year','lnGDPpercap']]
 df3 = df1.drop('lnConspercap', axis=1)
 HistoricalPredictionResults = run_prediction(SteelRegressionModel, economies, df3)
-
 
 # define function to plot using matplotlib
 def plot_results(economies, df1, df2):
@@ -71,13 +72,11 @@ def plot_results(economies, df1, df2):
 
 # Perform regressions
 # read in data from csv
-SteelHistoricalPrepared = pd.read_csv(r'Demand Models\Industry\data\modified\SteelHistoricalPrepared.csv')
-GDPPop7thFuturePrepared = pd.read_csv(r'Demand Models\Industry\data\modified\GDPPop7thFuturePrepared.csv')
+SteelHistoricalPrepared = pd.read_csv(r'Demand Models\Industry\data\modified\SteelHistoricalPrepared.csv').sort_values(by=['Economy','Year']).reset_index(drop=True)
+GDPPop7thFuturePrepared = pd.read_csv(r'Demand Models\Industry\data\modified\GDPPop7thFuturePrepared.csv').sort_values(by=['Economy','Year']).reset_index(drop=True)
 
 # get list of economies and create economy-model pairs
-economies = ['01_AUS', '03_CDA', '04_CHL', '05_PRC', '06_HKC', '07_INA',
-       '08_JPN', '09_ROK', '10_MAS', '11_MEX', '12_NZ', '14_PE', '15_RP',
-       '16_RUS', '17_SIN', '18_CT', '19_THA', '20_USA', '21_VN']
+economies = SteelHistoricalPrepared.Economy.unique()
 models = {economy: LinearRegression() for economy in economies}
 
 # set Economy as index and set target vector by dropping all other columns except lnGDPpercap and lnConspercap
@@ -86,8 +85,6 @@ df1 = (SteelHistoricalPrepared.set_index('Economy')
 
 # run regression
 SteelRegressionModel = run_regression(models, economies, df1)
-
-
 
 # make predictions using future values of GDP per capita
 FutureYears = GDPPop7thFuturePrepared[['Economy','Year']]
