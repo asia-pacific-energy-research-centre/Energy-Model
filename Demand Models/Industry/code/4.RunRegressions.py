@@ -18,10 +18,8 @@ from RegressionFunctions import run_regression, run_prediction, plot_results
 
 # Perform regressions
 # read in data from csv
-SteelHistoricalPrepared = (pd.read_csv(r'Demand Models\Industry\data\modified\SteelHistoricalPrepared.csv')
-                            .sort_values(by=['Economy','Year']).reset_index(drop=True))
-GDPPop7thFuturePrepared = (pd.read_csv(r'Demand Models\Industry\data\modified\GDPPop7thFuturePrepared.csv')
-                             .sort_values(by=['Economy','Year']).reset_index(drop=True))
+SteelHistoricalPrepared = pd.read_csv(r'Demand Models\Industry\data\modified\SteelHistoricalPrepared.csv')
+GDPPop7thFuturePrepared = pd.read_csv(r'Demand Models\Industry\data\modified\GDPPop7thFuturePrepared.csv')
 
 # get list of economies and create economy-model pairs
 economies = SteelHistoricalPrepared.Economy.unique()
@@ -33,6 +31,8 @@ df1 = (SteelHistoricalPrepared.set_index('Economy')
 
 # run regression
 SteelRegressionModel = run_regression(models, economies, df1)
+
+print('\nGenerated regression. Please wait for plotting.\n')
 
 # define future GDP per capita (ln) for future predictions
 FutureX = (GDPPop7thFuturePrepared.set_index('Economy')

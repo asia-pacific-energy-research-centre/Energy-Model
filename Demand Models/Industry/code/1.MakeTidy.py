@@ -6,8 +6,9 @@
 import numpy as np
 import pandas as pd
 import os
+import datetime as dt
 
-print('Started\n')
+print("Script started. -- Current date/time:", dt.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
 
 # create directories for modified and results data
 paths = {'path1':'Demand Models/Industry/data/modified','path2':'Demand Models/Industry/data/results'}
@@ -30,4 +31,4 @@ TidySteel.rename(columns={'value':'SteelConsumption'}, inplace=True)
 # write to csv
 TidySteel.to_csv(r'Demand Models\Industry\data\modified\TidySteel.csv', index=False)
 
-print('Finished')
+print("Results are saved. -- Current date/time:", dt.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))

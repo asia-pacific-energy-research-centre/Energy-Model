@@ -4,8 +4,9 @@
 # import math and table functions
 import pandas as pd
 import numpy as np 
+import datetime as dt
 
-print('Started\n')
+print("Script started. -- Current date/time:", dt.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
 
 # read datasets from csv
 SteelHistorical = pd.read_csv(r'Demand Models\Industry\data\modified\SteelHistorical.csv')
@@ -25,4 +26,4 @@ GDPPop7thFuture['lnGDPpercap'] = np.log(GDPPop7thFuture['GDPpercap'])
 SteelHistorical.to_csv(r'Demand Models\Industry\data\modified\SteelHistoricalPrepared.csv', index=False)   
 GDPPop7thFuture.to_csv(r'Demand Models\Industry\data\modified\GDPPop7thFuturePrepared.csv', index=False)
 
-print('Finished\n')
+print("Results are saved. -- Current date/time:", dt.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
