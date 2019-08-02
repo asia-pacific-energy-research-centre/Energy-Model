@@ -5,20 +5,24 @@ import pandas as pd
 import re
 import numpy as np
 import os
+import datetime as dt
+
+print("Script started. -- Current date/time:", dt.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+
 desired_width=320
 
-# create modified data directory
-path = "World Bank/modified"
+# create results directory
+path = "World Bank/results"
 try:
     os.mkdir(path)
 except OSError:
-    print ("%s already exists. It's OK." % path)
+    print(' ')
 else:
     print ("Successfully created the directory %s " % path)
 
 # set file path names
 input_file_name = 'World Bank/raw/WB_DATA_raw.csv'
-output_file_name = 'World Bank/modified/WB_data_tidy.csv'
+output_file_name = 'World Bank/results/WB_data_tidy.csv'
 
 pd.set_option('display.width', desired_width)
 pd.set_option('display.max_columns',10)
@@ -64,3 +68,5 @@ wb.columns = wb.columns.droplevel()
 
 # write tidy data to csv
 wb.to_csv(output_file_name)
+
+print("Results are saved. -- Current date/time:", dt.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
