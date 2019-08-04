@@ -19,8 +19,8 @@ GDP7thHistorical = pd.read_csv(r'Macro\data\results\GDP7thHistorical.csv')
 Pop7thHistorical = pd.read_csv(r'Macro\data\results\Pop7thHistorical.csv')
 
 # combine datasets
-SteelHistorical = pd.merge(GDP7thHistorical, TidySteel, how='left', on=['Economy','Year'])
-SteelHistorical = pd.merge(SteelHistorical,Pop7thHistorical,how='left',on=['Economy','Year'])
+SteelHistorical = pd.merge(TidySteel, GDP7thHistorical, Pop7thHistorical, how='left', on=['Economy','Year'])
+# SteelHistorical = pd.merge(SteelHistorical,Pop7thHistorical,how='left',on=['Economy','Year'])
 
 # remove negative numbers and NaNs
 SteelHistorical[SteelHistorical.SteelConsumption < 0] = np.NaN

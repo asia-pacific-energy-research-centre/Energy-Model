@@ -23,7 +23,7 @@ def run_prediction(models, economies, df):
         # run predictions
         for economy, model in models.items():
                 prediction = model.predict(df.loc[economy,:])
-                df_name = pd.DataFrame(np.exp(prediction), columns=['Predicted Steel Consumption'])
+                df_name = pd.DataFrame(np.exp(prediction), columns=['Predicted Steel Consumption per capita'])
                 df_name['Economy'] = economy
                 df_list.append(df_name)
         
@@ -37,7 +37,7 @@ def run_prediction(models, economies, df):
         df_merged = df_merged.drop('Economy_y', axis=1)
 
         # reorder columns
-        df_merged = df_merged[['Economy_x','Year','Predicted Steel Consumption']].reset_index(drop=True)
+        df_merged = df_merged[['Economy_x','Year','Predicted Steel Consumption per capita']].reset_index(drop=True)
         df_merged.rename(columns={'Economy_x':'Economy'}, inplace=True)
         return df_merged
 
@@ -49,8 +49,8 @@ def plot_results(economies, df1, df2):
                 df11=df1[df1['Economy']==economy]
                 df21=df2[df2['Economy']==economy]
                 ax = fig.add_subplot(7,3,num)
-                ax.plot(df11['Year'], df11[['Predicted Steel Consumption']],'r')
-                ax.plot(df21['Year'], df21[['Predicted Steel Consumption']],'b')
+                ax.plot(df11['Year'], df11[['Predicted Steel Consumption per capita']],'r')
+                ax.plot(df21['Year'], df21[['Predicted Steel Consumption per capita']],'b')
                 ax.set_title(economy)
 
                 #plt.tight_layout()
