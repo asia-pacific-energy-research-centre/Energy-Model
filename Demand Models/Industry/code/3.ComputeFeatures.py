@@ -9,8 +9,8 @@ import datetime as dt
 print("Script started. -- Current date/time:", dt.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
 
 # read datasets from csv
-SteelHistorical = pd.read_csv(r'Demand Models\Industry\data\modified\SteelHistorical.csv')
-GDPPop7thFuture = pd.read_csv(r'Demand Models\Industry\data\modified\GDPPop7thFuture.csv')
+SteelHistorical = pd.read_csv(r'Demand Models/Industry/data/modified/SteelHistorical.csv')
+GDPPop7thFuture = pd.read_csv(r'Demand Models/Industry/data/modified/GDPPop7thFuture.csv')
 
 # compute per capita then take natural logs
 SteelHistorical['GDPpercap'] = SteelHistorical['GDP'].div(SteelHistorical['Population'])
@@ -23,7 +23,7 @@ GDPPop7thFuture['GDPpercap'] = GDPPop7thFuture['GDP'].div(GDPPop7thFuture['Popul
 GDPPop7thFuture['lnGDPpercap'] = np.log(GDPPop7thFuture['GDPpercap'])
 
 # write prepared data to csv
-SteelHistorical.to_csv(r'Demand Models\Industry\data\modified\SteelHistoricalPrepared.csv', index=False)   
-GDPPop7thFuture.to_csv(r'Demand Models\Industry\data\modified\GDPPop7thFuturePrepared.csv', index=False)
+SteelHistorical.to_csv(r'Demand Models/Industry/data/modified/SteelHistoricalPrepared.csv', index=False)   
+GDPPop7thFuture.to_csv(r'Demand Models/Industry/data/modified/GDPPop7thFuturePrepared.csv', index=False)
 
 print("Results are saved. -- Current date/time:", dt.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
