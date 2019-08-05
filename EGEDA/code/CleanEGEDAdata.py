@@ -165,7 +165,7 @@ FUELcodes = {
         '09. Others':'Oth',
         '10. Electricity':'Elec',
         '11. Heat':'Heat',
-        '12. Total':'Tot'
+        '12. Total':'Tot',
         '13. Total Renewables':'TotRen'       
         }
 
@@ -217,9 +217,9 @@ FUELcodesNEW = {
         '4.10.5 Petroleum coke':'PetPOC',
         '4.10.6 Other products':'PetPOO',
         '5. Gas':'Gas',        
-        '5.1 Natural gas
-        '5.2 LNG
-        '5.3 Gas works gas
+        '5.1 Natural gas':'GasN',
+        '5.2 LNG':'GasL',
+        '5.3 Gas works gas':'GasO',
         '6 Hydro':'RenH',        
         '7 Nuclear':'Nuc',        
 # [REDUNDANT] RenNRE
