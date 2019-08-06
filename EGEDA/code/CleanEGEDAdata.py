@@ -63,8 +63,8 @@ dfResults = pd.concat(df_list, sort=True).reset_index(drop=True)
 dfResults = dfResults.replace('x', np.NaN)
 dfResults = dfResults.replace('X', np.NaN)
 
-# Make a list of Item Codes
-# note that 15.1.2 has whitespace after the text
+# Reorder the columns to bring Economy, Year, and Product Code to the beginning
+# note that there are typos
 dfResults = dfResults[['Economy', 
     'Year', 'Product Code', 
     '01. Indigenous Production', 
@@ -146,7 +146,7 @@ EconomyNames = {
 dfResults.replace(EconomyNames, inplace=True)
 
 # create dictionary of Product Code and APERC code
-FUELcodes = {
+Fuelcodes = {
         '01. Coal':'Coal',
         '02. Coal Products':'CoalP',
         '03. Crude Oil & NGL':'Oil',
@@ -174,7 +174,7 @@ FUELcodes = {
 
 # create dictionary of NEW Product Codes and APERC code
 # to replace the above codes in late 2019
-FUELcodesNEW = {
+FuelcodesNEW = {
         '1. Coal':'CoalH',
         '1.1 Hard coal':'CoalH',
         '1.1.1 Coking coal':'CoalHC',   
@@ -260,7 +260,7 @@ FUELcodesNEW = {
         }
 
 # code to replace fuel abbreviations
-dfResults.replace(FUELcodes, inplace=True)
+dfResults.replace(Fuelcodes, inplace=True)
 #dfResults.replace(FUELcodesNEW, inplace=True)
 
 ## [GROUP] RenGE + RenGH = RenG 'Geothermal energy'
