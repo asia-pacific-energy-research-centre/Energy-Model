@@ -49,8 +49,8 @@ def plot_results(economies, df1, df2):
                 df11=df1[df1['Economy']==economy]
                 df21=df2[df2['Economy']==economy]
                 ax = fig.add_subplot(7,3,num)
-                ax.plot(df11['Year'], df11[['Predicted Steel Consumption per capita']],'r')
-                ax.plot(df21['Year'], df21[['Predicted Steel Consumption per capita']],'b')
+                ax.plot(df11['Year'], df11[['Predicted Steel Consumption']],'r')
+                ax.plot(df21['Year'], df21[['Predicted Steel Consumption']],'b')
                 ax.set_title(economy)
 
                 #plt.tight_layout()

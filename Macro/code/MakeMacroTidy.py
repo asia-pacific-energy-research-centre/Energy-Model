@@ -18,8 +18,8 @@ for key, value in paths.items():
             print ("Successfully created the directory %s " % value)
 
 # import from Excel
-rawPop7th = pd.read_excel(r'Macro/data/raw/Population_7th_2019_07_02 - raw.xlsx')
-rawGDP7th = pd.read_excel(r'Macro/data/raw/GDP_7th_2019_07_02 - raw.xlsx')
+rawPop7th = pd.read_excel(r'Macro\data\raw\Population_7th_2019_07_02 - raw.xlsx')
+rawGDP7th = pd.read_excel(r'Macro\data\raw\GDP_7th_2019_07_02 - raw.xlsx')
 
 # define list of years
 year_list = list(range(1990,2051,1))
@@ -44,7 +44,8 @@ Pop7thHistorical = Pop7th[Pop7th.Year <= 2016].reset_index(drop=True)
 Pop7thFuture = Pop7th[Pop7th.Year > 2016].reset_index(drop=True)
 
 # write all dataframes to csv
-Pop7thHistorical.to_csv(r'Macro/data/results/Pop7thHistorical.csv', index=False)
-Pop7thFuture.to_csv(r'Macro/data/results/Pop7thFuture.csv', index=False)
-GDP7thHistorical.to_csv(r'Macro/data/results/GDP7thHistorical.csv', index=False)
-GDP7thFuture.to_csv(r'Macro/data/results/GDP7thFuture.csv', index=False)
+Pop7thHistorical.to_csv(r'Macro\data\results\Pop7thHistorical.csv', index=False)
+Pop7thFuture.to_csv(r'Macro\data\results\Pop7thFuture.csv', index=False)
+GDP7thHistorical.to_csv(r'Macro\data\results\GDP7thHistorical.csv', index=False)
+GDP7thFuture.to_csv(r'Macro\data\results\GDP7thFuture.csv', index=False)
+
