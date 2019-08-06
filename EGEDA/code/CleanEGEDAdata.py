@@ -34,7 +34,7 @@ for key, value in paths.items():
 # read all sheets from EGEDA spreadsheet to Pandas dictionary.
 # `sheet_name = none` means the output will be a dictionary that contains a key for each economy, 
 # and the value is a dataframe with the table data.
-RawEGEDA = pd.read_excel(r'EGEDA\data\modified\APEC21_22Jul2019B_ready.xlsx', sheet_name=None)
+RawEGEDA = pd.read_excel(r'EGEDA\data\modified\APEC21_22Jul2019B_ready.xlsx', sheet_name=None, na_values=['x', 'X', ''])
 
 # define year range
 years = list(range(1980,2016,1))
@@ -60,8 +60,8 @@ for sheet, dataframe in RawEGEDA.items():
 dfResults = pd.concat(df_list, sort=True).reset_index(drop=True)
 
 # replace x and X placeholders with NaNs
-dfResults = dfResults.replace('x', np.NaN)
-dfResults = dfResults.replace('X', np.NaN)
+#dfResults = dfResults.replace('x', np.NaN)
+#dfResults = dfResults.replace('X', np.NaN)
 
 # Reorder the columns to bring Economy, Year, and Product Code to the beginning
 # note that there are typos
@@ -267,6 +267,9 @@ dfResults.replace(Fuelcodes, inplace=True)
 ## [GROUP] RenSE + RenSH + RenSO = RenS 'Solar energy'
 ## [GROUP] RenBSF + RenBSB + RenBSC + RenBSO + RenBSW = RenBS 'Bioenergy Solid'
 ## [GROUP] RenBS + RenBL + RenBG = RenB 'Bioenergy'
+
+# replace field that's entirely space (or empty) with NaN
+#dfResults.replace(r'^\s+$', np.NaN, regex=True)
 
 # write to csv
 dfResults.to_csv(r'EGEDA\data\results\TidyEGEDA.csv', index=False)
