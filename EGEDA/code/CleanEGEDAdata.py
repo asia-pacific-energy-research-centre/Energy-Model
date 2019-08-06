@@ -163,18 +163,110 @@ FUELcodes = {
         '04.10 Other Petroleum Products':'PetPO',
         '05. Gas':'Gas',
         '06. Hydro':'RenH',
-        '07. Nuclear':'Nuc',
-# this code (RenNRE) will be made redundant
+        '07. Nuclear':'Nuc',        
         '08. Geothermal, Solar etc.':'RenNRE',
         '09. Others':'Oth',
         '10. Electricity':'Elec',
         '11. Heat':'Heat',
-        '12. Total':'Tot'
-# need further details to match the full EGEDA's dataset
+        '12. Total':'Tot',
+        '13. Total Renewables':'TotRen'       
+        }
+
+# create dictionary of NEW Product Codes and APERC code
+# to replace the above codes in late 2019
+FUELcodesNEW = {
+        '1. Coal':'CoalH',
+        '1.1 Hard coal':'CoalH',
+        '1.1.1 Coking coal':'CoalHC',   
+        '1.1.2 Other bituminous coal':'CoalHB',
+        '1.1.3 Sub-bituminous coal':'CoalHS',
+        '1.2 Anthracite':'CoalA',
+        '1.3 Lignite':'CoalL',
+        '1.4 Peat':'CoalO',
+        '2. Coal products':'CoalP',
+        '2.1 Coke oven coke':'CoalPC',
+        '2.2 Coke oven gas':'CoalPO',
+        '2.3 Blast furnace gas':'CoalPF',
+        '2.4 Oxygen steel furnace gas':'CoalPS',
+        '2.5 Patent fuel':'CoalPP',
+        '2.6 Coal tar':'CoalPT',
+        '2.7 BKB/PB':'CoalPB',
+        '3. Crude oil & NGL':'Oil',
+        '3.1 Crude oil':'OilC',
+        '3.2 Natural gas liquids':'OilN',
+        '3.3 Refinery feedstocks':'OilOR',
+        '3.4 Additives/  oxygenates':'OilOA',
+        '3.5 Other hydrocarbons':'OilOO',
+        '4. Petroleum Products':'PetP',
+# [REDUNDANT] PetPGx
+        '4.1 Gasoline':'PetPGx',
+        '4.1.1 Motor gasoline':'PetPG',
+        '4.1.2 Aviation gasoline':'PetPJG',
+        '4.2 Naphtha':'PetPN',        
+        '4.3 Jet Fuel':'PetPJ',        
+        '4.3.1 Gasoline type jet fuel':'PetPJO',
+        '4.3.2 Kerosene type jet fuel':'PetPJK',
+        '4.4 Kerosene':'PetPK',
+        '4.5 Gas/Diesel Oil':'PetPD',
+        '4.6 Fuel Oil':'PetPF',
+        '4.7 LPG':'PetPL',        
+        '4.8 Refinery gas (not liquefied)':'PetPR',        
+        '4.9 Ethane':'PetPE',        
+        '4.10 Other Petroleum Products':'PetPO',
+        '4.10.1 White spirit SBP':'PetPOW',
+        '4.10.2 Lubricants':'PetPOL',
+        '4.10.3 Bitumen':'PetPOB',
+        '4.10.4 Paraffin  waxes':'PetPOP',
+        '4.10.5 Petroleum coke':'PetPOC',
+        '4.10.6 Other products':'PetPOO',
+        '5. Gas':'Gas',        
+        '5.1 Natural gas':'GasN',
+        '5.2 LNG':'GasL',
+        '5.3 Gas works gas':'GasO',
+        '6 Hydro':'RenH',        
+        '7 Nuclear':'Nuc',        
+# [REDUNDANT] RenNRE
+        '8 Geothermal, solar etc.':'RenNRE',        
+        '8.1 Geothermal power':'RenGE',
+# [REDUNDANT] RenOO
+        '8.2 Other power':'RenOO',
+        '8.2.1 Photovoltaic':'RenSE',
+        '8.2.2 Tide, wave, ocean':'RenO',
+        '8.2.3 Wind':'RenW',
+        '8.2.4 Solar thermal':'RenSO',
+        '8.3 Geothermal heat':'RenGH',
+        '8.4 Solar heat':'RenSH',
+        '9 Others':'Oth',
+        '9.1 Fuelwood & woodwaste':'RenBSF',
+        '9.2 Bagasse':'RenBSB',
+        '9.3 Charcoal':'RenBSC',
+        '9.4 Other biomass':'RenBSO',
+        '9.5 Biogas':'RenBG',
+        '9.6 Industrial waste':'OthI',
+# [REDUNDANT] RenMSW
+        '9.7 Municipal solid waste':'RenMSW',
+        '9.7.1 Municipal solid waste (renewable)':'RenBSW',
+        '9.7.2 Municipal solid waste (non-renewable)':'OthM',
+        '9.8 Liquid biofuels':'RenBL',
+        '9.8.1 Biogasoline':'RenBLE',
+        '9.8.2 Biodiesel':'RenBLD',
+        '9.8.3 Bio jet kerosene':'RenBLJ',
+        '9.8.4 Other liquid biofuels':'RenBLO',
+        '9.9 Other sources':'OthO',        
+        '10. Electricity':'Elec',
+        '11. Heat':'Heat',
+        '12. Total':'Tot',
+        '13. Total Renewables':'TotRen'       
         }
 
 # code to replace fuel abbreviations
 dfResults.replace(FUELcodes, inplace=True)
+#dfResults.replace(FUELcodesNEW, inplace=True)
+
+## [GROUP] RenGE + RenGH = RenG 'Geothermal energy'
+## [GROUP] RenSE + RenSH + RenSO = RenS 'Solar energy'
+## [GROUP] RenBSF + RenBSB + RenBSC + RenBSO + RenBSW = RenBS 'Bioenergy Solid'
+## [GROUP] RenBS + RenBL + RenBG = RenB 'Bioenergy'
 
 # write to csv
 dfResults.to_csv(r'EGEDA\data\results\TidyEGEDA.csv', index=False)
