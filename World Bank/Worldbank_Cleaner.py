@@ -1,12 +1,28 @@
+# Worldbank_Cleaner.py
 
 # Import tools
 import pandas as pd
 import re
 import numpy as np
+import os
+import datetime as dt
+
+print("Script started. -- Current date/time:", dt.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+
 desired_width=320
 
-input_file_name = "WB_DATA_example.csv"
-output_file_name = "wb_data_tidy_example.csv"
+# create results directory
+path = "World Bank/results"
+try:
+    os.mkdir(path)
+except OSError:
+    print(' ')
+else:
+    print ("Successfully created the directory %s " % path)
+
+# set file path names
+input_file_name = 'World Bank/raw/WB_DATA_raw.csv'
+output_file_name = 'World Bank/results/WB_data_tidy.csv'
 
 pd.set_option('display.width', desired_width)
 pd.set_option('display.max_columns',10)
@@ -15,17 +31,18 @@ pd.set_option('display.max_columns',10)
 wb_data = pd.read_csv(input_file_name)
 
 # clean up the column names and make a list of all years in the series
-wb_coloumns = (list(wb_data.columns))
-wb_coloumns_cleen = []
-wb_coloumns_years = []
-for coloumn in wb_coloumns:
-    coloumn_cleen = re.sub(r"\[.*\]", "", coloumn).strip()
-    wb_coloumns_cleen.append(coloumn_cleen)
+wb_columns = (list(wb_data.columns))
+wb_columns_clean = []
+wb_columns_years = []
+for coloumn in wb_columns:
+    column_clean = re.sub(r"\[.*\]", "", coloumn).strip()
+    wb_columns_clean.append(column_clean)
     for num in coloumn:
-        if num.isdigit() and coloumn_cleen not in wb_coloumns_years:
-            wb_coloumns_years.append(coloumn_cleen)
+        if num.isdigit() and column_clean not in wb_columns_years:
+            wb_columns_years.append(column_clean)
+
 # replace columns names with cleaned up names
-wb_data = wb_data.set_axis(wb_coloumns_cleen, axis=1, inplace=False)
+wb_data = wb_data.set_axis(wb_columns_clean, axis=1, inplace=False)
 
 # list all unique series in the data set
 unique_series_names = wb_data["Series Name"].unique()
@@ -38,7 +55,7 @@ for string in columns_add:
 #print(unique_series_names_list)
 
 # make years a single a single column
-wb_melt_years = pd.melt(wb_data, id_vars =['Country Name','Country Code','Series Name'], value_vars=wb_coloumns_years,
+wb_melt_years = pd.melt(wb_data, id_vars =['Country Name','Country Code','Series Name'], value_vars=wb_columns_years,
                         var_name='Year')\
     .dropna()
 
@@ -47,13 +64,9 @@ wb_melt_years.set_index(keys=(list(wb_melt_years.columns)[:-1]), inplace = True)
 wb_data_tidy = wb_melt_years.unstack("Series Name")
 wb_data_tidy.reset_index(inplace= True, col_level=1)
 wb = wb_data_tidy.drop([0],axis= 0)
+wb.columns = wb.columns.droplevel()
 
-print(wb.head(0))
-
+# write tidy data to csv
 wb.to_csv(output_file_name)
 
-
-
-
-
-
+print("Results are saved. -- Current date/time:", dt.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
