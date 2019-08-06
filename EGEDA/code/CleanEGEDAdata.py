@@ -59,10 +59,6 @@ for sheet, dataframe in RawEGEDA.items():
 # combine individual economy dataframes to one dataframe
 dfResults = pd.concat(df_list, sort=True).reset_index(drop=True)
 
-# replace x and X placeholders with NaNs
-#dfResults = dfResults.replace('x', np.NaN)
-#dfResults = dfResults.replace('X', np.NaN)
-
 # Reorder the columns to bring Economy, Year, and Product Code to the beginning
 # note that there are typos
 dfResults = dfResults[['Economy', 
@@ -267,9 +263,6 @@ dfResults.replace(Fuelcodes, inplace=True)
 ## [GROUP] RenSE + RenSH + RenSO = RenS 'Solar energy'
 ## [GROUP] RenBSF + RenBSB + RenBSC + RenBSO + RenBSW = RenBS 'Bioenergy Solid'
 ## [GROUP] RenBS + RenBL + RenBG = RenB 'Bioenergy'
-
-# replace field that's entirely space (or empty) with NaN
-#dfResults.replace(r'^\s+$', np.NaN, regex=True)
 
 # write to csv
 dfResults.to_csv(r'EGEDA\data\results\TidyEGEDA.csv', index=False)
