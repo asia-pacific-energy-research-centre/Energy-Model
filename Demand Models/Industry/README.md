@@ -24,7 +24,7 @@ The code runs in the following order:
 File containing user-created functions to:
 - Generate linear regression model for all 21 economies.
 - Generate predicted consumption for all 21 economies.
-- Plot historical and projected consumption per capita result for all 21 economies.
+- Plot historical and projected consumption result for all 21 economies.
 
 ### data folder
 Each file has data for all economies unless else specified.
@@ -53,14 +53,14 @@ These files are created from running the code1-4.
 #### 3.results
 These files are created from running the code4.
 - *HistoricalPredictionResults.csv*
-  - Historical GDP per capita
-  - Historical consumption per capita and with natural logs
+  - Historical consumption per capita
+  - Historical population
+  - Historical consumption
 - *FuturePredictionResults.csv*
-  - Projected GDP per capita
-  - Projected consumption per capita and with natural logs
+  - Projected consumption per capita
+  - Projected population
+  - Porjected consumption
 - *SteelResultsCombined.csv*
-  - Historical GDP per capita
-  - Historical consumption per capita and with natural logs
-  - Projected GDP per capita
-  - Projected consumption per capita and with natural logs
-  
+  - Historical and projected consumption per capita
+  - Historical and projected population
+  - Historical and projected consumption  
