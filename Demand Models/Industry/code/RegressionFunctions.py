@@ -52,6 +52,11 @@ def plot_results(economies, df1, df2):
                 ax.plot(df11['Year'], df11[['Predicted Steel Consumption']],'r')
                 ax.plot(df21['Year'], df21[['Predicted Steel Consumption']],'b')
                 ax.set_title(economy)
-
-                #plt.tight_layout()
+                
+                # add y-axis label
+                plt.ylabel('thousand tonnes')    
+                
+                # add tight layout function
+                plt.tight_layout()
+        # show graphic
         plt.show()
