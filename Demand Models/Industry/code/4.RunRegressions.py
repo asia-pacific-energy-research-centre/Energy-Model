@@ -1,11 +1,5 @@
 # RunRegressions.py
-# create linear models for all 21 economies
-
-# step 1: create dictionary of model instances
-# step 2: loop over economy, model pairs
-
-# for future:
-# https://www.dataquest.io/blog/settingwithcopywarning/
+# create linear regrssion models for all 21 economies
 
 # import libraries
 import pandas as pd
@@ -13,57 +7,14 @@ import numpy as np
 import matplotlib.pyplot as plt 
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_squared_error, r2_score
+import sys
+import datetime as dt
 
-# define functions to perform regressions and predictions, and to plot results
-# loop over economy-model pairs to fit regression
-def run_regression(models, economies, df):
-        for economy, model in models.items():
-                (model.fit(df.loc[economy, :]
-                      .drop('lnConspercap', axis=1),
-                    df.loc[economy, 'lnConspercap']))
-        return models            
+print("Script started. -- Current date/time:", dt.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
 
-# create function for performing prediction and writing results
-# loop over economy-model pairs to make prediction and write prediction to csv, one for each economy
-def run_prediction(models, economies, years, df):
-        filelist = []
-        for economy, model in models.items():
-                prediction = model.predict(df.loc[economy,:])
-                results = years[years.Economy == economy]
-                results['prediction'] = prediction
-                results['Consumptionpercap'] = np.exp(prediction)
-                newfilename = '%sPrediction.csv' %economy
-                results.to_csv(r'Demand Models\Industry\data\modified\%s' %newfilename, header=True)
-                filelist.append(newfilename)
-
-        # read in all csv and combine to one df
-        df_list =[]
-        for economy in economies:
-                newfilename = '%sPrediction.csv' %economy
-                df_list.append(pd.read_csv(r'Demand Models\Industry\data\modified\%s' %newfilename))
-        dfResults = pd.concat(df_list).drop('Unnamed: 0', axis=1)
-        dfResults['GDPpercap'] = SteelHistoricalPrepared['GDPpercap']
-#        dfResults.to_csv(r'data\results\SteelPredictionsAll.csv')
-        
-        return dfResults
-
-# define function to plot using matplotlib
-def plot_results(economies, df1, df2):
-        fig = plt.figure(figsize=[8,16])
-
-        for economy,num in zip(economies, range(1,20)):
-                df11=df1[df1['Economy']==economy]
-                df21=df2[df2['Economy']==economy]
-                ax = fig.add_subplot(7,3,num)
-                ax.plot(df11['Year'], df11[['Consumptionpercap']],'r')
-                ax.plot(df21['Year'], df21[['Consumptionpercap']],'b')
-                ax.set_title(economy)
-
-                #plt.tight_layout()
-        plt.show()
-##################################
-# end of functions
-##################################
+# import regression functions from RegressionFunctions.py
+sys.path.insert(0, 'Demand Models/Industry/code')
+from RegressionFunctions import run_regression, run_prediction, plot_results
 
 # Perform regressions
 # read in data from csv
@@ -74,35 +25,51 @@ GDPPop7thFuturePrepared = pd.read_csv(r'Demand Models\Industry\data\modified\GDP
 economies = SteelHistoricalPrepared.Economy.unique()
 models = {economy: LinearRegression() for economy in economies}
 
-# set Economy as index and set target vector by dropping all other columns except lnGDPpercap and lnConspercap
-df1 = (SteelHistoricalPrepared.set_index('Economy')
-                                 .drop(['GDP','SteelConsumption','Population','GDPpercap','Conspercap'], axis=1))
+# set Economy as index 
+df1 = SteelHistoricalPrepared.set_index('Economy')
+# set explanatory variable x and dependent variable y
+x = ['Year','lnGDPpercap'] # data that has relationship with y
+y = ['lnConspercap'] # what you want to know
 
 # run regression
-SteelRegressionModel = run_regression(models, economies, df1)
+SteelRegressionModel = run_regression(models, economies, df1, x, y)
+
+print('\nGenerated regression. Please wait for plotting.\n')
 
 # make predictions using historical values of GDP per capita
-HistoricalYears = SteelHistoricalPrepared[['Economy','Year']]
-HistoricallnGDPpercap = (SteelHistoricalPrepared.set_index('Economy')
-                                 .drop(['GDP','SteelConsumption','Population','GDPpercap','Conspercap','lnConspercap'], axis=1))
-HistoricalPredictionResults = run_prediction(SteelRegressionModel, economies, HistoricalYears, HistoricallnGDPpercap)
-HistoricalPredictionResults.reset_index(drop=True).sort_values('Economy')
+HistoricalX = df1[['Year','lnGDPpercap']]
+ResultsColumn = ['Predicted Steel Consumption per capita']
+HistoricalPredictionResults = run_prediction(SteelRegressionModel, economies, HistoricalX, ResultsColumn)
 
-# make predictions using future values of GDP per capita
-FutureYears = GDPPop7thFuturePrepared[['Economy','Year']]
-FuturelnGDPpercap = (GDPPop7thFuturePrepared.set_index('Economy')
-                                                   .drop(['GDP','Population','GDPpercap'], axis=1))     
-FutureProjectionResults = run_prediction(SteelRegressionModel, economies, FutureYears, FuturelnGDPpercap)
-FutureProjectionResults.reset_index(drop=True).sort_values('Economy')
+# make predictions using FUTURE values of GDP per capita
+FutureX = GDPPop7thFuturePrepared.set_index('Economy')[['Year','lnGDPpercap']]
+FuturePredictionResults = run_prediction(SteelRegressionModel, economies, FutureX, ResultsColumn)
+
+# -- Compute steel consumption (instead of per capita)
+# read historical and future population data from csv
+Pop7thHistorical = pd.read_csv(r'Macro\data\results\Pop7thHistorical.csv')
+Pop7thFuture = pd.read_csv(r'Macro\data\results\Pop7thFuture.csv')
+
+# add population column to historical and future prediction results
+HistoricalPredictionResults = pd.merge(HistoricalPredictionResults, Pop7thHistorical, how='left', on=['Economy','Year'])
+FuturePredictionResults = pd.merge(FuturePredictionResults,Pop7thFuture, how='left',on=['Economy','Year'])
+
+# compute steel consumption
+HistoricalPredictionResults['Predicted Steel Consumption'] = HistoricalPredictionResults['Predicted Steel Consumption per capita'].mul(HistoricalPredictionResults['Population']).div(1000)
+FuturePredictionResults['Predicted Steel Consumption'] = FuturePredictionResults['Predicted Steel Consumption per capita'].mul(FuturePredictionResults['Population']).div(1000)
 
 # plot historical and future predictions
-plot_results(economies, HistoricalPredictionResults, FutureProjectionResults)
+figurename = 'Demand Models\Industry\steel consumption.png'
+PlotColumns = ['Predicted Steel Consumption']
+PLotylabel = 'thousand tonnes'
+plot_results(economies, HistoricalPredictionResults, FuturePredictionResults, figurename, PlotColumns, PLotylabel)
 
 # combine results
-SteelResultsCombined = pd.concat([HistoricalPredictionResults,FutureProjectionResults])
+SteelResultsCombined = pd.concat([HistoricalPredictionResults,FuturePredictionResults])
 
 # write results to csv
 HistoricalPredictionResults.to_csv(r'Demand Models\Industry\data\results\HistoricalPredictionResults.csv', index=False)
-FutureProjectionResults.to_csv(r'Demand Models\Industry\data\results\FutureProjectionResults.csv', index=False)
+FuturePredictionResults.to_csv(r'Demand Models\Industry\data\results\FuturePredictionResults.csv', index=False)
 SteelResultsCombined.to_csv(r'Demand Models\Industry\data\results\SteelResultsCombined.csv', index=False)
 
+print("Results are saved. -- Current date/time:", dt.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
