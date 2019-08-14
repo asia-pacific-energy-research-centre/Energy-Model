@@ -9,7 +9,6 @@
 # - removed column labels for columns A,B,C,D
 # - removed summary rows at bottom of each sheet
 # - removed miscellaneous calculations in row AP
-# - cleaning up Brunei '01. Coal' x '18. Heat Output in TJ' x 1981:1989
 
 #### Begin data manipulation ####
 
@@ -19,7 +18,8 @@ import pandas as pd
 import os
 import datetime as dt
 
-print("Cleaning started. -- Current date/time:", dt.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+print("Script started. -- Current date/time:", dt.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+print('\nImport the raw EGEDA data...')
 
 # automatically create directories for modified and results data
 # these are not tracked in GitHub (see .gitignore)
@@ -36,6 +36,9 @@ for key, value in paths.items():
 # `sheet_name = none` means the output will be a dictionary that contains a key for each economy, 
 # and the value is a dataframe with the table data.
 RawEGEDA = pd.read_excel(r'EGEDA\data\modified\APEC21_22Jul2019B_ready.xlsx', sheet_name=None, na_values=['x', 'X', ''])
+
+print('...Imported raw EGEDA data!')
+print('\nBegin cleaning...')
 
 # define year range
 years = list(range(1980,2016,1))
@@ -115,7 +118,7 @@ typos = {'05. Intarnational Aviation Bunkers':'05. International Aviation Bunker
          '15.1.2 Residential ':'15.1.2 Residential'}
 dfResults.rename(typos, axis='columns',inplace=True)
 
-# replace economies using APEC abbreviations
+# replace economies using APEC approved abbreviations
 EconomyNames = {
         'AUS':'AUS',
         'BRN':'BD',
@@ -170,9 +173,9 @@ Fuelcodes = {
         }
 
 # create dictionary of NEW Product Codes and APERC code
-# to replace the above codes in late 2019
+# to replace the above codes in late 2019 from new EGEDA release
 FuelcodesNEW = {
-        '1. Coal':'CoalH',
+        '1. Coal':'Coal',
         '1.1 Hard coal':'CoalH',
         '1.1.1 Coking coal':'CoalHC',   
         '1.1.2 Other bituminous coal':'CoalHB',
@@ -261,7 +264,7 @@ dfResults.replace(Fuelcodes, inplace=True)
 #dfResults.replace(FUELcodesNEW, inplace=True)
 
 # code to replace 'odd' Coal numbers in Brunei
-dfResults.loc[(dfResults['Economy']=='BD')&(dfResults['Year']<1990)&(dfResults['Product Code']=='Coal'),'18. Heat Output in TJ']=0
+dfResults.loc[(dfResults['Economy']=='BD') & (dfResults['Year'] < 1990) & (dfResults['Product Code']=='Coal'),'18. Heat Output in TJ']=0
 
 ## [GROUP] RenGE + RenGH = RenG 'Geothermal energy'
 ## [GROUP] RenSE + RenSH + RenSO = RenS 'Solar energy'
@@ -270,5 +273,5 @@ dfResults.loc[(dfResults['Economy']=='BD')&(dfResults['Year']<1990)&(dfResults['
 
 # write to csv
 dfResults.to_csv(r'EGEDA\data\results\TidyEGEDA.csv', index=False)
-
 print("\nFINISHED. -- Current date/time:", dt.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+print('\nResults saved in %s' %paths['path1'])
