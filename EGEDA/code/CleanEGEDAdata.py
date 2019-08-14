@@ -9,6 +9,7 @@
 # - removed column labels for columns A,B,C,D
 # - removed summary rows at bottom of each sheet
 # - removed miscellaneous calculations in row AP
+# - cleaning up Brunei '01. Coal' x '18. Heat Output in TJ' x 1981:1989
 
 #### Begin data manipulation ####
 
@@ -262,6 +263,9 @@ FuelcodesNEW = {
 # code to replace fuel abbreviations
 dfResults.replace(Fuelcodes, inplace=True)
 #dfResults.replace(FUELcodesNEW, inplace=True)
+
+# code to replace 'odd' Coal numbers in Brunei
+dfResults.loc[(dfResults['Economy']=='BD')&(dfResults['Year']<1990)&(dfResults['Product Code']=='Coal'),'18. Heat Output in TJ']=0
 
 ## [GROUP] RenGE + RenGH = RenG 'Geothermal energy'
 ## [GROUP] RenSE + RenSH + RenSO = RenS 'Solar energy'
