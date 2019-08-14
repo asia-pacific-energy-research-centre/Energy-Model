@@ -6,12 +6,16 @@ import numpy as np
 import pandas as pd
 import sys
 import datetime as dt
+import subprocess
 
 print("Script started. -- Current date/time:", dt.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
 
-# run Macro script to create Macro data
-sys.path.insert(0, 'Macro/code')
-import MakeMacroTidy
+## run Macro script to create Macro data
+#sys.path.insert(0, 'Macro/code/')
+#import MakeMacroTidy
+
+runMacro = 'python Macro\code\MakeMacroTidy.py'
+subprocess.run(runMacro, shell=False)
 
 # read data from csv and store as dataframe
 TidySteel = pd.read_csv(r'Demand Models\Industry\data\modified\TidySteel.csv')
