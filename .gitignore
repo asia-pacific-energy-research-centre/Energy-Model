@@ -20,7 +20,7 @@ Macro/data/modified
 Macro/data/results
 
 *.png 
-
+.DS_Store
 
 # GAMS 
 ## Do not track temp files:
