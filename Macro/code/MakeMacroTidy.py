@@ -48,3 +48,4 @@ Pop7thHistorical.to_csv(r'Macro\data\results\Pop7thHistorical.csv', index=False)
 Pop7thFuture.to_csv(r'Macro\data\results\Pop7thFuture.csv', index=False)
 GDP7thHistorical.to_csv(r'Macro\data\results\GDP7thHistorical.csv', index=False)
 GDP7thFuture.to_csv(r'Macro\data\results\GDP7thFuture.csv', index=False)
+
