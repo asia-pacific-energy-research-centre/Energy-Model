@@ -9,6 +9,7 @@
 # - removed column labels for columns A,B,C,D
 # - removed summary rows at bottom of each sheet
 # - removed miscellaneous calculations in row AP
+# file used by the code is APEC21_22Jul2019B_ready.xlsx
 
 #### Begin data manipulation ####
 
@@ -23,7 +24,7 @@ print('\nImport the raw EGEDA data...')
 
 # automatically create directories for modified and results data
 # these are not tracked in GitHub (see .gitignore)
-paths = {'path1':'EGEDA/data/results'}
+paths = {'path1':'EGEDA/results'}
 for key, value in paths.items(): 
         try:
             os.makedirs(value)
@@ -145,7 +146,7 @@ EconomyNames = {
 # code to replace economy abbreviations
 dfResults.replace(EconomyNames, inplace=True)
 
-# create dictionary of Product Code and APERC code
+# create dictionary of EGEDA Product Codes and APERC Fuel code
 Fuelcodes = {
         '01. Coal':'Coal',
         '02. Coal Products':'CoalP',
@@ -263,8 +264,10 @@ FuelcodesNEW = {
 dfResults.replace(Fuelcodes, inplace=True)
 #dfResults.replace(FUELcodesNEW, inplace=True)
 
+dfResults.rename(columns={'Product Code':'Fuel Code'}, inplace=True)
+
 # code to replace 'odd' Coal numbers in Brunei
-dfResults.loc[(dfResults['Economy']=='BD') & (dfResults['Year'] < 1990) & (dfResults['Product Code']=='Coal'),'18. Heat Output in TJ']=0
+dfResults.loc[(dfResults['Economy']=='BD') & (dfResults['Year'] < 1990) & (dfResults['Fuel Code']=='Coal'),'18. Heat Output in TJ']=0
 
 ## [GROUP] RenGE + RenGH = RenG 'Geothermal energy'
 ## [GROUP] RenSE + RenSH + RenSO = RenS 'Solar energy'
@@ -272,6 +275,6 @@ dfResults.loc[(dfResults['Economy']=='BD') & (dfResults['Year'] < 1990) & (dfRes
 ## [GROUP] RenBS + RenBL + RenBG = RenB 'Bioenergy'
 
 # write to csv
-dfResults.to_csv(r'EGEDA\data\results\TidyEGEDA.csv', index=False)
+dfResults.to_csv(r'EGEDA\results\TidyEGEDA.csv', index=False)
 print("\nFINISHED. -- Current date/time:", dt.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
-print('\nResults saved in %s' %paths['path1'])
+print('\nResults saved in the folder %s' %paths['path1'])
