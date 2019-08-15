@@ -21,38 +21,41 @@ print("\nScript started. -- Current date/time:", dt.datetime.now().strftime("%Y-
 figurename = 'TPES'
 
 dfResults = pd.read_csv(r'EGEDA\results\TidyEGEDA.csv')
-economies = dfResults.Economy.unique()
-#economies = ['CT','VN']
+economies = dfResults['Economy'].unique()
 
-dfPlot = dfResults[['Economy','Year','Fuel Code','07. Total Primary Energy Supply']]
-dfPlot = dfPlot[dfPlot['07. Total Primary Energy Supply']>0].dropna()
-table = pd.pivot_table(dfPlot, values='07. Total Primary Energy Supply', index=['Economy', 'Year'], columns=['Fuel Code'], aggfunc=np.sum)
-table.reset_index(level=['Economy','Year'], inplace=True)
-table.drop(columns=['Tot'], inplace=True)
+# select what to plot
+# select a column
+df = dfResults[['Economy','Year','Fuel Code','07. Total Primary Energy Supply']]
+df = df[df['07. Total Primary Energy Supply']>0].dropna()
+# select fuel codes
+df = df[df['Fuel Code'].isin(['Coal', 'Oil', 'PetP','Gas','RenH','Nuc','RenNRE','Oth','Elec','Heat','TotRen'])]
 
-# Initialize the figure
+# pivot to make fuels as columns because matplotlib will plot each column as a variable
+df = pd.pivot_table(df, values='07. Total Primary Energy Supply', index=['Economy', 'Year'], columns=['Fuel Code'], aggfunc=np.sum)
+df.reset_index(level=['Economy','Year'], inplace=True)
+
+# Initialize the figure and make white background
 plt.style.use('tableau-colorblind10')
 
 # multiple line plot
 fig = plt.figure(figsize=[16,12])
+#fig.set_facecolor("w")
 for economy,num in zip(economies, range(1,22)):
     print('Creating plot for %s...' %economy)
     ax = fig.add_subplot(3,7,num)
-    df11=table[table['Economy']==economy]
+    df11=df[df['Economy']==economy]
     # plot 
     for column in df11.drop(['Economy','Year'], axis=1):
         plt.plot(df11['Year'], df11[column], marker='', linewidth=1.5)
         ax.set_title(economy)
         plt.ylabel('TPES [MTOE]')
-        plt.sharey=True
         plt.tight_layout()
     
 # Same limits for everybody!
     plt.xlim(1980,2016)
     plt.ylim(0,250000)
-fig.legend( list(df11.drop(['Economy','Year'], axis=1)),  loc='bottom right', ncol=5 )
+fig.legend( list(df.drop(['Economy','Year'], axis=1)),  loc='lower center', ncol=9)
 
-#plt.legend(list(df11), loc=4, frameon=False)
 plt.show()
 fig.savefig(figurename,dpi=200)
 print('Figure saved as %s' % figurename)

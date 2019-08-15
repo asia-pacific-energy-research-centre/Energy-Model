@@ -18,6 +18,8 @@ World*Bank/modified
 Macro/data/modified
 Macro/data/results
 
+*.png
+
 # GAMS 
 ## Do not track temp files:
 *.gpr
