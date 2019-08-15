@@ -21,7 +21,8 @@ print("\nScript started. -- Current date/time:", dt.datetime.now().strftime("%Y-
 figurename = 'TPES'
 
 dfResults = pd.read_csv(r'EGEDA\results\TidyEGEDA.csv')
-economies = dfResults['Economy'].unique()
+#economies = dfResults['Economy'].unique()
+economies = ['CT','VN']
 
 # select what to plot
 # select a column
@@ -39,7 +40,7 @@ plt.style.use('tableau-colorblind10')
 
 # multiple line plot
 fig = plt.figure(figsize=[16,12])
-#fig.set_facecolor("w")
+
 for economy,num in zip(economies, range(1,22)):
     print('Creating plot for %s...' %economy)
     ax = fig.add_subplot(3,7,num)
