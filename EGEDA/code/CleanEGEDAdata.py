@@ -138,7 +138,7 @@ EconomyNames = {
         'PHL':'RP',
         'RUS':'RUS',
         'SGP':'SIN',
-        'CT':'CT',
+        'TWN':'CT',
         'THA':'THA',
         'USA':'USA',
         'VNM':'VN'}
