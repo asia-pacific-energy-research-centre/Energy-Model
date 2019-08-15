@@ -21,8 +21,7 @@ print("\nScript started. -- Current date/time:", dt.datetime.now().strftime("%Y-
 figurename = 'TPES'
 
 dfResults = pd.read_csv(r'EGEDA\results\TidyEGEDA.csv')
-#economies = dfResults['Economy'].unique()
-economies = ['CT','VN']
+economies = dfResults['Economy'].unique()
 
 # select what to plot
 # select a column
