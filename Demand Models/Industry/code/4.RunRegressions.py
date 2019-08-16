@@ -62,7 +62,10 @@ FuturePredictionResults['Predicted Steel Consumption'] = FuturePredictionResults
 figurename = 'Demand Models\Industry\steel consumption.png'
 PlotColumns = ['Predicted Steel Consumption']
 PLotylabel = 'thousand tonnes'
-plot_results(economies, HistoricalPredictionResults, FuturePredictionResults, figurename, PlotColumns, PLotylabel)
+
+newplot = 'new'
+if newplot=='old':
+    plot_results(economies, HistoricalPredictionResults, FuturePredictionResults, figurename, PlotColumns, PLotylabel)
 
 # combine results
 SteelResultsCombined = pd.concat([HistoricalPredictionResults,FuturePredictionResults])
@@ -73,3 +76,38 @@ FuturePredictionResults.to_csv(r'Demand Models\Industry\data\results\FuturePredi
 SteelResultsCombined.to_csv(r'Demand Models\Industry\data\results\SteelResultsCombined.csv', index=False)
 
 print("Results are saved. -- Current date/time:", dt.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+
+# you can use the plot script from EGEDA
+
+if newplot=='new':
+    # try new plot
+    df1 = HistoricalPredictionResults.drop(['Predicted Steel Consumption per capita','Population'], axis=1)
+    df2 = FuturePredictionResults.drop(['Predicted Steel Consumption per capita','Population'], axis=1)
+    df1.rename(columns={'Predicted Steel Consumption':'Historical'},inplace=True)
+    df2.rename(columns={'Predicted Steel Consumption':'Future'},inplace=True)
+    dfPlot = pd.merge(df1,df2,how='outer')
+    
+    # Initialize the figure and make white background
+    plt.style.use('tableau-colorblind10')
+    
+    # multiple line plot
+    fig = plt.figure(figsize=[16,12])
+    
+    for economy,num in zip(economies, range(1,22)):
+        print('Creating plot for %s...' %economy)
+        ax = fig.add_subplot(3,7,num)
+        df11=dfPlot[dfPlot['Economy']==economy]
+        # plot 
+        for column in df11.drop(['Economy','Year'], axis=1):
+            plt.plot(df11['Year'], df11[column], marker='', linewidth=1.5)
+            ax.set_title(economy)
+            plt.ylabel(PLotylabel)
+            plt.tight_layout()
+        # Same limits for everybody!
+        plt.xlim(1980,2050)
+        plt.ylim(0,1000000)   
+    fig.legend( list(dfPlot.drop(['Economy','Year'], axis=1)),  loc='lower center', ncol=9)
+    
+    plt.show()
+    fig.savefig(figurename,dpi=200)
+    print('Figure saved as %s' % figurename)
