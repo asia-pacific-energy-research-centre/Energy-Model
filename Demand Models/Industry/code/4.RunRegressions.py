@@ -71,15 +71,16 @@ print("Results are saved. -- Current date/time:", dt.datetime.now().strftime("%Y
 
 # Plotting using the EGEDA plot code
 figurename = 'Demand Models\Industry\steel consumption.png'
-PLotylabel = 'thousand tonnes'
+Plotylabel = 'thousand tonnes'
 
+# create dataframe with Historical results in one column and Future in another
 df1 = HistoricalPredictionResults.drop(['Predicted Steel Consumption per capita','Population'], axis=1)
 df2 = FuturePredictionResults.drop(['Predicted Steel Consumption per capita','Population'], axis=1)
 df1.rename(columns={'Predicted Steel Consumption':'Historical'},inplace=True)
 df2.rename(columns={'Predicted Steel Consumption':'Future'},inplace=True)
 dfPlot = pd.merge(df1,df2,how='outer')
 
-# Initialize the figure and make white background
+# Create the 'figure'
 plt.style.use('tableau-colorblind10')
 
 # multiple line plot
@@ -92,7 +93,7 @@ for ax, economy,num in zip(axes.flatten(), economies, range(1,22)):
     for column in df11.drop(['Economy','Year'], axis=1):
         ax.plot(df11['Year'], df11[column], marker='', linewidth=1.5, label=economy)
         ax.set_title(economy)
-        ax.set_ylabel(PLotylabel)
+        ax.set_ylabel(Plotylabel)
         #ax.xaxis.set_major_locator(x_locator)
     # Same limits for everybody!
     ax.set_ylim(0,1000000)   
@@ -104,5 +105,3 @@ fig.savefig(figurename,dpi=200)
 print('Figure saved as %s' % figurename)
 print('Preparing to show the figure...')
 plt.show()
-
-    
