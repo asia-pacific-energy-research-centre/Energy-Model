@@ -9,6 +9,7 @@ from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_squared_error, r2_score
 import sys
 import datetime as dt
+from matplotlib.ticker import MultipleLocator, FixedLocator, FixedFormatter
 
 print("Script started. -- Current date/time:", dt.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
 
@@ -58,15 +59,6 @@ FuturePredictionResults = pd.merge(FuturePredictionResults,Pop7thFuture, how='le
 HistoricalPredictionResults['Predicted Steel Consumption'] = HistoricalPredictionResults['Predicted Steel Consumption per capita'].mul(HistoricalPredictionResults['Population']).div(1000)
 FuturePredictionResults['Predicted Steel Consumption'] = FuturePredictionResults['Predicted Steel Consumption per capita'].mul(FuturePredictionResults['Population']).div(1000)
 
-# plot historical and future predictions
-figurename = 'Demand Models\Industry\steel consumption.png'
-PlotColumns = ['Predicted Steel Consumption']
-PLotylabel = 'thousand tonnes'
-
-newplot = 'new'
-if newplot=='old':
-    plot_results(economies, HistoricalPredictionResults, FuturePredictionResults, figurename, PlotColumns, PLotylabel)
-
 # combine results
 SteelResultsCombined = pd.concat([HistoricalPredictionResults,FuturePredictionResults])
 
@@ -77,37 +69,40 @@ SteelResultsCombined.to_csv(r'Demand Models\Industry\data\results\SteelResultsCo
 
 print("Results are saved. -- Current date/time:", dt.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
 
-# you can use the plot script from EGEDA
+# Plotting using the EGEDA plot code
+figurename = 'Demand Models\Industry\steel consumption.png'
+PLotylabel = 'thousand tonnes'
 
-if newplot=='new':
-    # try new plot
-    df1 = HistoricalPredictionResults.drop(['Predicted Steel Consumption per capita','Population'], axis=1)
-    df2 = FuturePredictionResults.drop(['Predicted Steel Consumption per capita','Population'], axis=1)
-    df1.rename(columns={'Predicted Steel Consumption':'Historical'},inplace=True)
-    df2.rename(columns={'Predicted Steel Consumption':'Future'},inplace=True)
-    dfPlot = pd.merge(df1,df2,how='outer')
+df1 = HistoricalPredictionResults.drop(['Predicted Steel Consumption per capita','Population'], axis=1)
+df2 = FuturePredictionResults.drop(['Predicted Steel Consumption per capita','Population'], axis=1)
+df1.rename(columns={'Predicted Steel Consumption':'Historical'},inplace=True)
+df2.rename(columns={'Predicted Steel Consumption':'Future'},inplace=True)
+dfPlot = pd.merge(df1,df2,how='outer')
+
+# Initialize the figure and make white background
+plt.style.use('tableau-colorblind10')
+
+# multiple line plot
+fig, axes = plt.subplots(nrows=3, ncols=7, sharex=False, sharey=False, figsize=(16,12))
+#x_locator = FixedLocator([1990, 2016,  2030, 2050])
+for ax, economy,num in zip(axes.flatten(), economies, range(1,22)):
+    print('Creating plot for %s...' %economy)
+    df11=dfPlot[dfPlot['Economy']==economy]
+
+    for column in df11.drop(['Economy','Year'], axis=1):
+        ax.plot(df11['Year'], df11[column], marker='', linewidth=1.5, label=economy)
+        ax.set_title(economy)
+        ax.set_ylabel(PLotylabel)
+        #ax.xaxis.set_major_locator(x_locator)
+    # Same limits for everybody!
+    ax.set_ylim(0,1000000)   
+    ax.label_outer()
+
+plt.tight_layout()
+fig.legend( list(dfPlot.drop(['Economy','Year'], axis=1)),  loc='lower center', ncol=9)
+fig.savefig(figurename,dpi=200)
+print('Figure saved as %s' % figurename)
+print('Preparing to show the figure...')
+plt.show()
+
     
-    # Initialize the figure and make white background
-    plt.style.use('tableau-colorblind10')
-    
-    # multiple line plot
-    fig = plt.figure(figsize=[16,12])
-    
-    for economy,num in zip(economies, range(1,22)):
-        print('Creating plot for %s...' %economy)
-        ax = fig.add_subplot(3,7,num)
-        df11=dfPlot[dfPlot['Economy']==economy]
-        # plot 
-        for column in df11.drop(['Economy','Year'], axis=1):
-            plt.plot(df11['Year'], df11[column], marker='', linewidth=1.5)
-            ax.set_title(economy)
-            plt.ylabel(PLotylabel)
-            plt.tight_layout()
-        # Same limits for everybody!
-        plt.xlim(1980,2050)
-        plt.ylim(0,1000000)   
-    fig.legend( list(dfPlot.drop(['Economy','Year'], axis=1)),  loc='lower center', ncol=9)
-    
-    plt.show()
-    fig.savefig(figurename,dpi=200)
-    print('Figure saved as %s' % figurename)
