@@ -40,14 +40,16 @@ def run_prediction(models, economies, df, ResultsColumn):
 
 # define function to plot using matplotlib
 def plot_results(economies, df1, df2, figurename, PlotColumns, PLotylabel):
-        fig = plt.figure(figsize=[8,16])
+        fig = plt.figure(figsize=[16,12])
+        plt.style.use('tableau-colorblind10')
 
-        for economy,num in zip(economies, range(1,20)):
+        for economy,num in zip(economies, range(1,22)):
+                print('Creating plot for %s...' %economy)
                 df11=df1[df1['Economy']==economy]
                 df21=df2[df2['Economy']==economy]
-                ax = fig.add_subplot(7,3,num)
-                ax.plot(df11['Year'], df11[PlotColumns],'r')
-                ax.plot(df21['Year'], df21[PlotColumns],'b')
+                ax = fig.add_subplot(3,7,num)
+                ax.plot(df11['Year'], df11[PlotColumns])
+                ax.plot(df21['Year'], df21[PlotColumns])
                 ax.set_title(economy)
                 
                 # add y-axis label
