@@ -28,6 +28,32 @@ RawSteelData.head()
 TidySteel = pd.melt(RawSteelData, id_vars=['Economy'], var_name='Year')
 TidySteel.rename(columns={'value':'SteelConsumption'}, inplace=True)
 
+# replace economies using APEC approved abbreviations
+EconomyNames = {
+    '01_AUS':'AUS',
+    '02_BD':'BD',
+    '03_CDA':'CDA',
+    '04_CHL':'CHL',
+    '05_PRC':'PRC',
+    '06_HKC':'HKC',
+    '07_INA':'INA',
+    '08_JPN':'JPN',
+    '09_ROK':'KOR',
+    '10_MAS':'MAS',
+    '11_MEX':'MEX',
+    '12_NZ':'NZ',
+    '13_PNG':'PNG',
+    '14_PE':'PE',
+    '15_RP':'RP',
+    '16_RUS':'RUS',
+    '17_SIN':'SIN',
+    '18_CT':'CT',
+    '19_THA':'THA',
+    '20_USA':'USA',
+    '21_VN':'VN'}
+
+TidySteel.replace(EconomyNames, inplace=True)
+
 # write to csv
 TidySteel.to_csv(r'Demand Models/Industry/data/modified/TidySteel.csv', index=False)
 
