@@ -15,7 +15,7 @@ print("Script started. -- Current date/time:", dt.datetime.now().strftime("%Y-%m
 
 # import regression functions from RegressionFunctions.py
 sys.path.insert(0, 'Demand Models/Industry/code')
-from RegressionFunctions import run_regression, run_prediction, plot_results
+from RegressionFunctions import run_regression, run_prediction, plot_results, plot2
 
 # Perform regressions
 # read in data from csv
@@ -85,7 +85,6 @@ plt.style.use('tableau-colorblind10')
 
 # multiple line plot
 fig, axes = plt.subplots(nrows=3, ncols=7, sharex=False, sharey=False, figsize=(16,12))
-#x_locator = FixedLocator([1990, 2016,  2030, 2050])
 for ax, economy,num in zip(axes.flatten(), economies, range(1,22)):
     print('Creating plot for %s...' %economy)
     df11=dfPlot[dfPlot['Economy']==economy]
@@ -94,14 +93,15 @@ for ax, economy,num in zip(axes.flatten(), economies, range(1,22)):
         ax.plot(df11['Year'], df11[column], marker='', linewidth=1.5, label=economy)
         ax.set_title(economy)
         ax.set_ylabel(Plotylabel)
-        #ax.xaxis.set_major_locator(x_locator)
     # Same limits for everybody!
     ax.set_ylim(0,1000000)   
     ax.label_outer()
 
-plt.tight_layout()
-fig.legend( list(dfPlot.drop(['Economy','Year'], axis=1)),  loc='lower center', ncol=9)
+#plt.tight_layout()
+fig.legend( list(dfPlot.drop(['Economy','Year'], axis=1)),  bbox_to_anchor=(0,0,1,0.25), loc='lower center', ncol=9)
 fig.savefig(figurename,dpi=200)
 print('Figure saved as %s' % figurename)
 print('Preparing to show the figure...')
 plt.show()
+
+plot2(economies, dfPlot, figurename, Plotylabel)

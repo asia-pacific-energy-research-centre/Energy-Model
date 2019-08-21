@@ -19,7 +19,7 @@ print("\nScript started. -- Current date/time:", dt.datetime.now().strftime("%Y-
 
 # choose where to save the final image file
 figurename = 'TPES'
-
+Plotylabel = 'TPES [MTOE]'
 dfResults = pd.read_csv(r'EGEDA\results\TidyEGEDA.csv')
 economies = dfResults['Economy'].unique()
 
@@ -28,35 +28,36 @@ economies = dfResults['Economy'].unique()
 df = dfResults[['Economy','Year','Fuel Code','07. Total Primary Energy Supply']]
 df = df[df['07. Total Primary Energy Supply']>0].dropna()
 # select fuel codes
-df = df[df['Fuel Code'].isin(['Coal', 'Oil', 'PetP','Gas','RenH','Nuc','RenNRE','Oth','Elec','Heat','TotRen'])]
+df = df[df['Fuel Code'].isin(['Coal', 'Oil', 'PetP','Gas','RenH','Nuc','RenNRE','Oth','Heat','TotRen'])]
 
 # pivot to make fuels as columns because matplotlib will plot each column as a variable
 df = pd.pivot_table(df, values='07. Total Primary Energy Supply', index=['Economy', 'Year'], columns=['Fuel Code'], aggfunc=np.sum)
 df.reset_index(level=['Economy','Year'], inplace=True)
 
-# Initialize the figure and make white background
+# Plot
+
+# Create the 'figure'
 plt.style.use('tableau-colorblind10')
 
 # multiple line plot
-fig = plt.figure(figsize=[16,12])
-
-for economy,num in zip(economies, range(1,22)):
+fig, axes = plt.subplots(nrows=3, ncols=7, sharex=False, sharey=False, figsize=(16,12))
+for ax, economy,num in zip(axes.flatten(), economies, range(1,22)):
     print('Creating plot for %s...' %economy)
-    ax = fig.add_subplot(3,7,num)
     df11=df[df['Economy']==economy]
-    # plot 
-    for column in df11.drop(['Economy','Year'], axis=1):
-        plt.plot(df11['Year'], df11[column], marker='', linewidth=1.5)
-        ax.set_title(economy)
-        plt.ylabel('TPES [MTOE]')
-        plt.tight_layout()
-    
-# Same limits for everybody!
-    plt.xlim(1980,2016)
-    plt.ylim(0,250000)
-fig.legend( list(df.drop(['Economy','Year'], axis=1)),  loc='lower center', ncol=9)
 
-plt.show()
+    for column in df11.drop(['Economy','Year'], axis=1):
+        ax.plot(df11['Year'], df11[column])
+        ax.set_title(economy)
+        ax.set_ylabel(Plotylabel)
+    # Same limits for everybody!
+    #ax.set_ylim(0,2500000)   
+    ax.label_outer()
+
+# place legend outside of plots
+fig.legend( list(df.drop(['Economy','Year'], axis=1)), bbox_to_anchor=(0,0,1,0.25), loc='lower center', ncol=9)
+#plt.tight_layout()    # tight_layout does not work with bbox_to_anchor
 fig.savefig(figurename,dpi=200)
 print('Figure saved as %s' % figurename)
+print('Preparing to show the figure...')
+plt.show()
 print("\nFINISHED. -- Current date/time:", dt.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
