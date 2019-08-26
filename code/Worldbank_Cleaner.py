@@ -12,7 +12,7 @@ print("Script started. -- Current date/time:", dt.datetime.now().strftime("%Y-%m
 desired_width=320
 
 # create results directory
-path = "World Bank/results"
+path = "results"
 try:
     os.mkdir(path)
 except OSError:
@@ -21,8 +21,8 @@ else:
     print ("Successfully created the directory %s " % path)
 
 # set file path names
-input_file_name = 'World Bank/raw/WB_DATA_raw.csv'
-output_file_name = 'World Bank/results/WB_data_tidy.csv'
+input_file_name = 'data/WB_DATA_raw.csv'
+output_file_name = 'results/WB_data_tidy.csv'
 
 pd.set_option('display.width', desired_width)
 pd.set_option('display.max_columns',10)

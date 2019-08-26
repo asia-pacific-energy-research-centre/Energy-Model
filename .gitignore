@@ -4,7 +4,7 @@
 results/
 modified/
 
-Platts/data/
+data/Platts
 
 *.png 
 .DS_Store

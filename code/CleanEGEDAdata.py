@@ -24,7 +24,7 @@ print('\nImport the raw EGEDA data...')
 
 # automatically create directories for modified and results data
 # these are not tracked in GitHub (see .gitignore)
-paths = {'path1':'EGEDA/results'}
+paths = {'path1':'results'}
 for key, value in paths.items(): 
         try:
             os.makedirs(value)
@@ -36,7 +36,7 @@ for key, value in paths.items():
 # read all sheets from EGEDA spreadsheet to Pandas dictionary.
 # `sheet_name = none` means the output will be a dictionary that contains a key for each economy, 
 # and the value is a dataframe with the table data.
-RawEGEDA = pd.read_excel(r'EGEDA\data\modified\APEC21_22Jul2019B_ready.xlsx', sheet_name=None, na_values=['x', 'X', ''])
+RawEGEDA = pd.read_excel(r'data\APEC21_22Jul2019B_ready.xlsx', sheet_name=None, na_values=['x', 'X', ''])
 
 print('...Imported raw EGEDA data!')
 print('\nBegin cleaning...')
@@ -275,6 +275,6 @@ dfResults.loc[(dfResults['Economy']=='BD') & (dfResults['Year'] < 1990) & (dfRes
 ## [GROUP] RenBS + RenBL + RenBG = RenB 'Bioenergy'
 
 # write to csv
-dfResults.to_csv(r'EGEDA\results\TidyEGEDA.csv', index=False)
+dfResults.to_csv(r'results\TidyEGEDA.csv', index=False)
 print("\nFINISHED. -- Current date/time:", dt.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
 print('\nResults saved in the folder %s' %paths['path1'])
