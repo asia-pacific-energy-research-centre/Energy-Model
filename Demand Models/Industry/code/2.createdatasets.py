@@ -27,7 +27,12 @@ SteelHistorical = pd.merge(SteelHistorical,Pop7thHistorical,how='left',on=['Econ
 # this replaces the NaN for BD, PNG, and RUS with min values across all economies
 # Note that the BD, PNG values are too high - need to impute by economy
 SteelHistorical.loc[SteelHistorical['SteelConsumption'] < 0,'SteelConsumption'] = np.NaN
-SteelHistorical.fillna(SteelHistorical[['SteelConsumption']].mean(), inplace=True)
+#SteelHistorical.fillna(SteelHistorical[['SteelConsumption']].mean(), inplace=True)
+
+i = SteelHistorical[['SteelConsumption']].min()
+SteelHistorical.loc[SteelHistorical['Economy'].isin(['BD','PNG'])] = SteelHistorical.loc[SteelHistorical['Economy'].isin(['BD','PNG'])].fillna(i)
+j = SteelHistorical.loc[SteelHistorical['Economy']=='RUS','SteelConsumption'].mean()
+SteelHistorical.loc[SteelHistorical['Economy'].isin(['RUS'])] = SteelHistorical.loc[SteelHistorical['Economy'].isin(['RUS'])].fillna(j)
 
 # combine future GDP and population, drop the world value
 GDP7thFuture = pd.read_csv(r'Macro\data\results\GDP7thFuture.csv')
