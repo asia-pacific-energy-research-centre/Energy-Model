@@ -40,7 +40,7 @@ df.reset_index(level=['Economy','Year'], inplace=True)
 plt.style.use('tableau-colorblind10')
 
 # multiple line plot
-fig, axes = plt.subplots(nrows=3, ncols=7, sharex=False, sharey=False, figsize=(16,12))
+fig, axes = plt.subplots(nrows=3, ncols=7, sharex=False, sharey=True, figsize=(16,12))
 for ax, economy,num in zip(axes.flatten(), economies, range(1,22)):
     print('Creating plot for %s...' %economy)
     df11=df[df['Economy']==economy]
@@ -51,7 +51,7 @@ for ax, economy,num in zip(axes.flatten(), economies, range(1,22)):
         ax.set_ylabel(Plotylabel)
     # Same limits for everybody!
     #ax.set_ylim(0,2500000)   
-    ax.label_outer()
+    #ax.label_outer()
 
 # place legend outside of plots
 fig.legend( list(df.drop(['Economy','Year'], axis=1)), bbox_to_anchor=(0,0,1,0.25), loc='lower center', ncol=9)
