@@ -31,10 +31,40 @@ Pop7th.rename(columns={'variable':'Year','value':'Population'}, inplace=True)
 GDP7th = pd.melt(rawGDP7th, id_vars='Economy', value_vars=year_list)
 GDP7th.rename(columns={'variable':'Year','value':'GDP'}, inplace=True)
 
-# remove World Economy data
+# replace economies using APEC approved abbreviations
+EconomyNames = {
+    '01_AUS':'AUS',
+    '02_BD':'BD',
+    '03_CDA':'CDA',
+    '04_CHL':'CHL',
+    '05_PRC':'PRC',
+    '06_HKC':'HKC',
+    '07_INA':'INA',
+    '08_JPN':'JPN',
+    '09_ROK':'KOR',
+    '10_MAS':'MAS',
+    '11_MEX':'MEX',
+    '12_NZ':'NZ',
+    '13_PNG':'PNG',
+    '14_PE':'PE',
+    '15_RP':'RP',
+    '16_RUS':'RUS',
+    '17_SIN':'SIN',
+    '18_CT':'CT',
+    '19_THA':'THA',
+    '20_USA':'USA',
+    '21_VN':'VN'}
 
+GDP7th.replace(EconomyNames, inplace=True)
+Pop7th.replace(EconomyNames, inplace=True)
+
+# remove World Economy data
 Pop7th.dropna(inplace=True)
 GDP7th.dropna(inplace=True)
+
+GDP7th.drop(GDP7th[GDP7th['Economy']=='27_WOR'].index, inplace=True)
+Pop7th.drop(Pop7th[Pop7th['Economy']=='27_WOR'].index, inplace=True)
+
 
 # separate historical and future
 # store all values up up to, and including, 2016 in one dataframe
@@ -48,4 +78,3 @@ Pop7thHistorical.to_csv(r'Macro\data\results\Pop7thHistorical.csv', index=False)
 Pop7thFuture.to_csv(r'Macro\data\results\Pop7thFuture.csv', index=False)
 GDP7thHistorical.to_csv(r'Macro\data\results\GDP7thHistorical.csv', index=False)
 GDP7thFuture.to_csv(r'Macro\data\results\GDP7thFuture.csv', index=False)
-
