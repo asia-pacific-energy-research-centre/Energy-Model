@@ -20,24 +20,23 @@ import os
 import datetime as dt
 
 print("Script started. -- Current date/time:", dt.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
-print('\nImport the raw EGEDA data...')
 
-# automatically create directories for modified and results data
-# these are not tracked in GitHub (see .gitignore)
-paths = {'path1':'results'}
+# create directories for modified and results data
+paths = {'path1':'data\modified','path2':'data\modified','path3':'data\processed', 'path4':'results'}
 for key, value in paths.items(): 
         try:
             os.makedirs(value)
         except OSError:
-            print (" ")
+            print ("Directory %s exists." % value)
         else:
-            print ("Successfully created %s " % value)
+            print ("Successfully created the directory %s " % value)
 
 # read all sheets from EGEDA spreadsheet to Pandas dictionary.
+# units are in ktoe
 # `sheet_name = none` means the output will be a dictionary that contains a key for each economy, 
 # and the value is a dataframe with the table data.
-RawEGEDA = pd.read_excel(r'data\APEC21_22Jul2019B_ready.xlsx', sheet_name=None, na_values=['x', 'X', ''])
-
+print('\nImporting the raw EGEDA data...')
+RawEGEDA = pd.read_excel(r'data\raw\APEC21_22Jul2019B_ready.xlsx', sheet_name=None, na_values=['x', 'X', ''])
 print('...Imported raw EGEDA data!')
 print('\nBegin cleaning...')
 
@@ -52,9 +51,10 @@ for sheet, dataframe in RawEGEDA.items():
         
         # Make Item Code Columns
         df_name = (RawEGEDA[sheet].drop(['Product Number', 'Item Number'], axis=1).set_index(['Product Code', 'Item Code'])
-                  .rename_axis(['Year'], axis=1)
-                  .stack().unstack('Item Code')
-                  .reset_index())
+              .div(1000)
+              .rename_axis(['Year'], axis=1)
+              .stack().unstack('Item Code')
+              .reset_index())
  
         # create column with economy name
         df_name['Economy'] = sheet
@@ -269,12 +269,15 @@ dfResults.rename(columns={'Product Code':'Fuel Code'}, inplace=True)
 # code to replace 'odd' Coal numbers in Brunei
 dfResults.loc[(dfResults['Economy']=='BD') & (dfResults['Year'] < 1990) & (dfResults['Fuel Code']=='Coal'),'18. Heat Output in TJ']=0
 
+# convert units from ktoe to Mtoe
+
+
 ## [GROUP] RenGE + RenGH = RenG 'Geothermal energy'
 ## [GROUP] RenSE + RenSH + RenSO = RenS 'Solar energy'
 ## [GROUP] RenBSF + RenBSB + RenBSC + RenBSO + RenBSW = RenBS 'Bioenergy Solid'
 ## [GROUP] RenBS + RenBL + RenBG = RenB 'Bioenergy'
 
 # write to csv
-dfResults.to_csv(r'results\TidyEGEDA.csv', index=False)
+dfResults.to_csv(r'data\processed\TidyEGEDA.csv', index=False)
 print("\nFINISHED. -- Current date/time:", dt.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
-print('\nResults saved in the folder %s' %paths['path1'])
+print('\nCleaned data saved in the folder %s' %paths['path3'])
