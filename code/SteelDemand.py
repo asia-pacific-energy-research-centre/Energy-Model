@@ -1,4 +1,4 @@
-# Calculate steel consumption demand
+# Steel Demand Model
 
 # import math and data table functions
 import numpy as np
@@ -72,7 +72,6 @@ TidySteel.to_csv(r'data/modified/TidySteel.csv', index=False)
 # STEP 2
 # read data from csv and store as dataframe
 TidySteel = pd.read_csv(r'data\modified\TidySteel.csv')
-TidySteel
 
 GDP7thHistorical = pd.read_csv(r'data\processed\GDP7thHistorical.csv')
 Pop7thHistorical = pd.read_csv(r'data\processed\Pop7thHistorical.csv')
@@ -99,7 +98,7 @@ Pop7thFuture = pd.read_csv(r'data\processed\Pop7thFuture.csv')
 
 GDPPop7thFuture = pd.merge(GDP7thFuture,Pop7thFuture,how='left',on=['Economy','Year']).reset_index(drop=True)
 
-# STEP 3
+
 # compute per capita then take natural logs
 SteelHistorical['GDPpercap'] = SteelHistorical['GDP'].div(SteelHistorical['Population'])
 SteelHistorical['Conspercap'] = SteelHistorical['SteelConsumption'].div(SteelHistorical['Population'])
@@ -114,7 +113,7 @@ GDPPop7thFuture['lnGDPpercap'] = np.log(GDPPop7thFuture['GDPpercap'])
 SteelHistorical.to_csv(r'data\modified\SteelHistoricalPrepared.csv', index=False)   
 GDPPop7thFuture.to_csv(r'data\modified\GDPPop7thFuturePrepared.csv', index=False)
 
-# Perform regressions
+# STEP 3: perform regressions
 # read in data from csv
 SteelHistoricalPrepared = pd.read_csv(r'data\modified\SteelHistoricalPrepared.csv')
 GDPPop7thFuturePrepared = pd.read_csv(r'data\modified\GDPPop7thFuturePrepared.csv')
@@ -124,13 +123,13 @@ economies = SteelHistoricalPrepared.Economy.unique()
 models = {economy: LinearRegression() for economy in economies}
 
 # set Economy as index and keep years for regression as Year2
-#SteelHistoricalPrepared['Year2'] = SteelHistoricalPrepared['Year']
-#df1 = SteelHistoricalPrepared.set_index(['Economy','Year'])
 df1 = SteelHistoricalPrepared.set_index('Economy')
 
 # set explanatory variable x and dependent variable y
-x = ['Year','lnGDPpercap'] # data that has relationship with y
-y = ['lnConspercap'] # what you want to know
+# x = data that has relationship with y
+# y = what you want to know
+x = ['Year','lnGDPpercap']
+y = ['lnConspercap']
 
 # STEP 4: run regression
 SteelRegressionModel = run_regression(models, economies, df1, x, y)
@@ -143,7 +142,7 @@ ResultsColumn = ['Predicted Steel Consumption per capita']
 HistoricalPredictionResults = run_prediction(SteelRegressionModel, economies, HistoricalX, ResultsColumn)
 
 # STEP 5: make future predictions
-
+print('\nMaking predictions...\n')
 # make predictions using FUTURE values of GDP per capita
 FutureX = GDPPop7thFuturePrepared.set_index('Economy')[['Year','lnGDPpercap']]
 FuturePredictionResults = run_prediction(SteelRegressionModel, economies, FutureX, ResultsColumn)
@@ -158,6 +157,8 @@ FuturePredictionResults = pd.merge(FuturePredictionResults,Pop7thFuture, how='le
 HistoricalPredictionResults['Predicted Steel Consumption'] = HistoricalPredictionResults['Predicted Steel Consumption per capita'].mul(HistoricalPredictionResults['Population']).div(1000000)
 FuturePredictionResults['Predicted Steel Consumption'] = FuturePredictionResults['Predicted Steel Consumption per capita'].mul(FuturePredictionResults['Population']).div(1000000)
 
+print('\nFinished predictions!\n')
+
 # combine results
 SteelResultsCombined = pd.concat([HistoricalPredictionResults,FuturePredictionResults])
 
@@ -171,6 +172,8 @@ SteelResultsCombined.to_csv(r'data\processed\SteelResultsCombined.csv', index=Fa
 # Plotting using the EGEDA plot code
 figurename = 'results\steel consumption.png'
 Plotylabel = 'million tonnes'
+sharex = True
+sharey = True
 
 # create dataframe with Historical results in one column and Future in another
 df1 = HistoricalPredictionResults.drop(['Predicted Steel Consumption per capita','Population'], axis=1)
@@ -182,7 +185,7 @@ dfPlot = pd.merge(df1,df2,how='outer')
 # Create the figure
 #plt.style.use('tableau-colorblind10')
 print('Preparing to show the figure...')
-plot2(economies, dfPlot, figurename, Plotylabel)
+plot2(economies, dfPlot, figurename, Plotylabel, sharex, sharey)
 print('Figure saved as %s' % figurename)
 
 # Finished

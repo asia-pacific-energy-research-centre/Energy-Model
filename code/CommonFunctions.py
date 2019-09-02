@@ -5,39 +5,54 @@ import matplotlib.pyplot as plt
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_squared_error, r2_score
 
-# define functions to perform regressions and predictions, and to plot results
-# loop over economy-model pairs to fit regression
 def run_regression(models, economies, df, x, y):
-        for economy, model in models.items():
-                (model.fit(df.loc[economy, x],
-                    df.loc[economy, y]))
-        return models            
+    """
+    Perform linear regression for one or multiple economies.
+    economy = list of economies
+    models = {economy: LinearRegression() for economy in economies}
+    The function returns a dictionary of economy-model pairs. That is,
+    each economy will have its own set of coefficients.
+    """
+    for economy, model in models.items():
+            (model.fit(df.loc[economy, x],
+                df.loc[economy, y]))
+    return models            
 
-# create function for performing prediction and writing results
-# loop over economy-model pairs to make prediction and write prediction to csv, one for each economy
 def run_prediction(models, economies, df, ResultsColumn):
-        df_list =[]
-        # run predictions
-        for economy, model in models.items():
-                years = df['Year']
-                years.reset_index(drop=True, inplace=True)
-                prediction = model.predict(df.loc[economy,:])
-                df_name = pd.DataFrame(np.exp(prediction), columns=ResultsColumn)
-                df_name.insert(loc=0,column='Year',value=years)
-                df_name.insert(loc=0,column='Economy',value=economy)
-                df_list.append(df_name)
+    """
+    Use coefficients from run_regression to generate predictions.
+    Pass a dataframe df with the X and Y data. 
+    ResultsColumn = name of prediction results
+    """
+    df_list =[]
+    # run predictions
+    for economy, model in models.items():
+            years = df['Year']
+            years.reset_index(drop=True, inplace=True)
+            prediction = model.predict(df.loc[economy,:])
+            df_name = pd.DataFrame(np.exp(prediction), columns=ResultsColumn)
+            df_name.insert(loc=0,column='Year',value=years)
+            df_name.insert(loc=0,column='Economy',value=economy)
+            df_list.append(df_name)
+    # combine individual economy dataframes to one dataframe
+    dfResults = pd.concat(df_list, sort=True)
+    return dfResults
 
-        # combine individual economy dataframes to one dataframe
-        dfResults = pd.concat(df_list, sort=True)
-        return dfResults
-
-def plot2(economies, df, figurename, Plotylabel):
-    
+def plot2(economies, df, figurename, Plotylabel, share_x, share_y):
+    """
+    Line plot for 21 economies. 
+    Economies = economies to plot
+    df = dataframe of data to plot. Note: each line must be a column.
+    Plotylabel = y label for graph
+    share_x = share the x axis (true or False)
+    share_y = share the y axis (True or False)
+    """
+    print('Preparing plots...')
     # Create the 'figure'
     plt.style.use('tableau-colorblind10')
     
     # multiple line plot
-    fig, axes = plt.subplots(nrows=3, ncols=7, sharex=True, sharey=False, figsize=(16,12))
+    fig, axes = plt.subplots(nrows=3, ncols=7, sharex=share_x, sharey=share_y, figsize=(16,12))
     for ax, economy,num in zip(axes.flatten(), economies, range(1,22)):
         print('Creating plot for %s...' %economy)
         df11=df[df['Economy']==economy]
@@ -56,9 +71,17 @@ def plot2(economies, df, figurename, Plotylabel):
     plt.show()
 
 def cagr(start_value, end_value, num_periods):
+    """
+    Calculate compound annual growth rate
+    """
     return (end_value / start_value) ** (1 / (num_periods - 1)) - 1
 
 def calcCAGR(df,economies):
+    """
+    Calculate CAGR for all economies.
+    df = dataframe with columns of data for growth rates
+    economies = list of economies
+    """
     df_list = []
     for economy in economies.flatten():
         df11 = df[df['Economy']==economy]
@@ -72,6 +95,11 @@ def calcCAGR(df,economies):
     return df
 
 def calcYOY(df,economies):
+    """
+    Calculate year-over-year for all economies.
+    df = dataframe with columns of data for growth rates
+    economies = list of economies
+    """
     df_list = []
     for economy in economies.flatten():
         df11 = df.loc[economy]
