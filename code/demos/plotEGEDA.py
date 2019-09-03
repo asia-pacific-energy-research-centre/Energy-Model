@@ -1,3 +1,9 @@
+# plotEGEDA.py
+# Plot data from EGEDA dataset
+# To use, replace the Product Code with one of interest.
+# Example used '07. Total Primary Energy Supply'
+
+# import libraries
 import pandas as pd 
 import numpy as np 
 import matplotlib.pyplot as plt  
@@ -22,12 +28,14 @@ else:
 
 print("\nScript started. -- Current date/time:", dt.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
 
-# select what to plot
+# import EGEDA dataset
 dfResults = pd.read_csv(r'data\processed\TidyEGEDA.csv')
 economies = dfResults['Economy'].unique()
-# select a column
+
+# select a column to plot
 df = dfResults[['Economy','Year','Fuel Code','07. Total Primary Energy Supply']]
 df = df[df['07. Total Primary Energy Supply']>0].dropna()
+
 # select fuel codes
 df = df[df['Fuel Code'].isin(['Coal', 'Oil', 'PetP','Gas','RenH','Nuc','RenNRE','Oth','Heat','TotRen'])]
 
@@ -36,7 +44,8 @@ df = pd.pivot_table(df, values='07. Total Primary Energy Supply', index=['Econom
 df.reset_index(level=['Economy','Year'], inplace=True)
 
 # Plot
-figurename = 'results\TPES.png'
+# Change sharex and sharey to True or False
+figurename = 'reports\TPES.png'
 Plotylabel = 'TPES [MTOE]'
 sharex = True
 sharey = True

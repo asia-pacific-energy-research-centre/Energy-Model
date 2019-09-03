@@ -1,7 +1,6 @@
 # CleanEGEDAdata.py
 
-# Take EGEDA 2016 data and reshape in Tidy format and clean
-# https://stackoverflow.com/questions/45066873/pandas-melt-with-multiple-value-vars
+# This file prepares the EGEDA dataset for analysis.
 
 # raw data file = APEC21_22Jul2019B_raw.xlsx
 # manual adjustments made to the raw data file before the following code:
@@ -22,7 +21,7 @@ import datetime as dt
 print("Script started. -- Current date/time:", dt.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
 
 # create directories for modified and results data
-paths = {'path1':'data\modified','path2':'data\modified','path3':'data\processed', 'path4':'results'}
+paths = {'path1':'data\modified','path2':'data\modified','path3':'data\processed', 'path4':'results', 'path5':'reports'}
 for key, value in paths.items(): 
         try:
             os.makedirs(value)
@@ -36,7 +35,7 @@ for key, value in paths.items():
 # `sheet_name = none` means the output will be a dictionary that contains a key for each economy, 
 # and the value is a dataframe with the table data.
 print('\nImporting the raw EGEDA data...')
-RawEGEDA = pd.read_excel(r'data\raw\APEC21_22Jul2019B_ready.xlsx', sheet_name=None, na_values=['x', 'X', ''])
+RawEGEDA = pd.read_excel(r'data\raw\EGEDA\APEC21_22Jul2019B_ready.xlsx', sheet_name=None, na_values=['x', 'X', ''])
 print('...Imported raw EGEDA data!')
 print('\nBegin cleaning...')
 

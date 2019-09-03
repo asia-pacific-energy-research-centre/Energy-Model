@@ -1,4 +1,7 @@
-# some useful statistics
+# statsEGEDA.py
+# Compute some useful statistics from EGEDA data
+
+# import libraries
 import pandas as pd 
 import numpy as np 
 import matplotlib.pyplot as plt  
@@ -35,11 +38,10 @@ dfCAGR = calcCAGR(df,economies)
 dfCAGR.rename({'A':'Economy','B':'Fuel Code','C':'CAGR'}, axis=1,inplace=True)
 CAGR = dfCAGR.to_csv(r'data\processed\Production CAGR.csv', index=False)
 
-# for display
+# display in human readable layout
 dfCAGR.set_index(['Economy','Fuel Code'], inplace=True, drop=True)
 dfCAGR = dfCAGR.unstack(['Fuel Code']).reset_index()
 dfCAGR.fillna(0, inplace=True)
-
 
 # YOY percent change
 # choose dataframe and features

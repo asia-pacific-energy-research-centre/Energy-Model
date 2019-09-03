@@ -1,3 +1,4 @@
+# SteelDemand.py
 # Steel Demand Model
 
 # import math and data table functions
@@ -19,7 +20,7 @@ from CommonFunctions import run_regression, run_prediction, plot2
 print("Script started. -- Current date/time:", dt.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
 
 # create directories for modified and results data
-paths = {'path1':'data\modified','path2':'data\modified','path3':'data\processed', 'path4':'results'}
+paths = {'path1':'data\modified','path2':'data\modified','path3':'data\processed', 'path4':'results', 'path5':'reports'}
 for key, value in paths.items(): 
         try:
             os.makedirs(value)
@@ -32,8 +33,7 @@ for key, value in paths.items():
 runMacro = 'python code\MakeMacroTidy.py'
 subprocess.run(runMacro, shell=False)
 
-# STEP 1
-# read in raw steel data
+# STEP 1: read in raw steel data
 RawSteelData = pd.read_csv(r'data\raw\Industry\IS_consumption7th.csv')
 TidySteel = RawSteelData.set_index('Economy').stack().reset_index(name='SteelConsumption')
 TidySteel.rename(columns={'level_1':'Year'}, inplace=True)
@@ -73,14 +73,16 @@ TidySteel.to_csv(r'data/modified/TidySteel.csv', index=False)
 # read data from csv and store as dataframe
 TidySteel = pd.read_csv(r'data\modified\TidySteel.csv')
 
+# import historical GDP and population
 GDP7thHistorical = pd.read_csv(r'data\processed\GDP7thHistorical.csv')
 Pop7thHistorical = pd.read_csv(r'data\processed\Pop7thHistorical.csv')
 
-# combine datasets
+# combine historical data in to one dataframe
 SteelHistorical = pd.merge(GDP7thHistorical, TidySteel, how='left', on=['Economy','Year'])
 SteelHistorical = pd.merge(SteelHistorical,Pop7thHistorical,how='left',on=['Economy','Year'])
 
 # Replace negative numbers with NaN
+# The 7th Edition steel data used negative numbers to indicate NaNs.
 # Instead of dropping NaN, 'impute' the values by using mean, median, min, etc
 # this replaces the NaN for BD, PNG, and RUS with min values across all economies
 # Note that the BD, PNG values are too high - need to impute by economy
@@ -97,7 +99,6 @@ GDP7thFuture = pd.read_csv(r'data\processed\GDP7thFuture.csv')
 Pop7thFuture = pd.read_csv(r'data\processed\Pop7thFuture.csv')
 
 GDPPop7thFuture = pd.merge(GDP7thFuture,Pop7thFuture,how='left',on=['Economy','Year']).reset_index(drop=True)
-
 
 # compute per capita then take natural logs
 SteelHistorical['GDPpercap'] = SteelHistorical['GDP'].div(SteelHistorical['Population'])
@@ -122,7 +123,7 @@ GDPPop7thFuturePrepared = pd.read_csv(r'data\modified\GDPPop7thFuturePrepared.cs
 economies = SteelHistoricalPrepared.Economy.unique()
 models = {economy: LinearRegression() for economy in economies}
 
-# set Economy as index and keep years for regression as Year2
+# set Economy as index
 df1 = SteelHistoricalPrepared.set_index('Economy')
 
 # set explanatory variable x and dependent variable y
@@ -132,6 +133,7 @@ x = ['Year','lnGDPpercap']
 y = ['lnConspercap']
 
 # STEP 4: run regression
+# run_regression is a function from CommonFunctions.py
 SteelRegressionModel = run_regression(models, economies, df1, x, y)
 
 print('\nGenerated regression. Please wait for plotting.\n')
@@ -147,19 +149,18 @@ print('\nMaking predictions...\n')
 FutureX = GDPPop7thFuturePrepared.set_index('Economy')[['Year','lnGDPpercap']]
 FuturePredictionResults = run_prediction(SteelRegressionModel, economies, FutureX, ResultsColumn)
 
-# -- Compute steel consumption (instead of per capita)
-
+# Compute steel consumption (instead of per capita)
 # add population column to historical and future prediction results
 HistoricalPredictionResults = pd.merge(HistoricalPredictionResults, Pop7thHistorical, how='left', on=['Economy','Year'])
 FuturePredictionResults = pd.merge(FuturePredictionResults,Pop7thFuture, how='left',on=['Economy','Year'])
 
-# compute steel consumption
+# compute steel consumption by multiplyingPer Capita consumption by population
 HistoricalPredictionResults['Predicted Steel Consumption'] = HistoricalPredictionResults['Predicted Steel Consumption per capita'].mul(HistoricalPredictionResults['Population']).div(1000000)
 FuturePredictionResults['Predicted Steel Consumption'] = FuturePredictionResults['Predicted Steel Consumption per capita'].mul(FuturePredictionResults['Population']).div(1000000)
 
 print('\nFinished predictions!\n')
 
-# combine results
+# combine results in to one dataframe
 SteelResultsCombined = pd.concat([HistoricalPredictionResults,FuturePredictionResults])
 
 # write results to csv
@@ -168,9 +169,9 @@ FuturePredictionResults.to_csv(r'data\processed\FuturePredictionResults.csv', in
 SteelResultsCombined.to_csv(r'data\processed\SteelResultsCombined.csv', index=False)
 
 # STEP 6 - plot results
-
-# Plotting using the EGEDA plot code
-figurename = 'results\steel consumption.png'
+# set file name
+# Use sharex and sharey = True or False to share those axes
+figurename = 'reports\steel consumption.png'
 Plotylabel = 'million tonnes'
 sharex = True
 sharey = True
@@ -183,7 +184,7 @@ df2.rename(columns={'Predicted Steel Consumption':'Future'},inplace=True)
 dfPlot = pd.merge(df1,df2,how='outer')
 
 # Create the figure
-#plt.style.use('tableau-colorblind10')
+# plot2 is a function from CommonFunctions.py
 print('Preparing to show the figure...')
 plot2(economies, dfPlot, figurename, Plotylabel, sharex, sharey)
 print('Figure saved as %s' % figurename)
