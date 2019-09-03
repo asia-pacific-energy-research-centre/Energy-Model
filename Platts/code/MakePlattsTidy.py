@@ -25,16 +25,21 @@ for key, value in paths.items():
 # - create a list for the columns you want to keep, then pass that list to the read_csv function so you don't
 #   have to type the same thing in the next two read_csv calls
 
+# create a list of data that will be retrieved from the Platts power data
+# create a list of APEC economies that are available from the Platts database, except Hong Kong that is incorporated in China 
+Platt_data = ['COUNTRY', 'UTYPE', 'MW', 'YEAR', 'STATUS', 'ELECTYPE', 'FUEL', 'ALTFUEL', 'BOILTYPE', 'TURBTYPE', 'GENTYPE', 'STYPE', 'PARTCTL', 'SO2CTL', 'NOXCTL', 'RETIRE']
+APEC_economies = ['AUSTRALIA', 'BRUNEI', 'CHINA', 'INDONESIA', 'JAPAN', 'PAPUA NEW GUINEA', 'SINGAPORE', 'THAILAND', 'TAIWAN', 'VIETNAM', 'CANADA', 'PHILIPPINES', 'USA', 'RUSSIA', 'NEW ZEALAND', 'CHILE', 'PERU','MALAYSIA','SOUTH KOREA','MEXICO']
 #Select power data from Platts database by choosing 16 out of 45 columns
-RawPowerDataAsia = pd.read_csv(r'Platts\data\MI_WorldElectricPowerPlants_Asia_March2019_v1.csv', skiprows=3, usecols=['MW', 'STATUS', 'YEAR', 'UTYPE', 'FUEL', 'ALTFUEL', 'BOILTYPE', 'TURBTYPE', 'GENTYPE', 'STYPE', 'PARTCTL', 'SO2CTL', 'NOXCTL', 'RETIRE', 'COUNTRY', 'ELECTYPE'])
-RawPowerDataNAmerica = pd.read_csv(r'Platts\data\MI_WorldElectricPowerPlants_NorthAmerica_March2019_v1.csv', skiprows=3, usecols=['MW', 'STATUS', 'YEAR', 'UTYPE', 'FUEL', 'ALTFUEL', 'BOILTYPE', 'TURBTYPE', 'GENTYPE', 'STYPE', 'PARTCTL', 'SO2CTL', 'NOXCTL', 'RETIRE', 'COUNTRY', 'ELECTYPE'])
-RawPowerDataOther = pd.read_csv(r'Platts\data\MI_WorldElectricPowerPlants_Other_March2019_v1.csv', skiprows=3, usecols=['MW', 'STATUS', 'YEAR', 'UTYPE', 'FUEL', 'ALTFUEL', 'BOILTYPE', 'TURBTYPE', 'GENTYPE', 'STYPE', 'PARTCTL', 'SO2CTL', 'NOXCTL', 'RETIRE', 'COUNTRY', 'ELECTYPE'])
+RawPowerDataAsia = pd.read_csv(r'Platts\data\MI_WorldElectricPowerPlants_Asia_March2019_v1.csv', skiprows=3, usecols=Platt_data)
+RawPowerDataNAmerica = pd.read_csv(r'Platts\data\MI_WorldElectricPowerPlants_NorthAmerica_March2019_v1.csv', skiprows=3, usecols=Platt_data)
+RawPowerDataOther = pd.read_csv(r'Platts\data\MI_WorldElectricPowerPlants_Other_March2019_v1.csv', skiprows=3, usecols=Platt_data)
 
 # Merge all three Platts database that are based on three world regions into one file
 CombinedPowerData = pd.concat([RawPowerDataAsia, RawPowerDataNAmerica, RawPowerDataOther])
 
 # Select only APEC economies except for Hong Kong which may be included in the CHINA data
-CombinedPowerData = CombinedPowerData.loc[CombinedPowerData['COUNTRY'].isin(['AUSTRALIA', 'BRUNEI', 'CHINA', 'INDONESIA', 'JAPAN', 'PAPUA NEW GUINEA', 'SINGAPORE', 'THAILAND', 'TAIWAN', 'VIETNAM', 'CANADA', 'PHILIPPINES', 'USA', 'RUSSIA', 'NEW ZEALAND', 'CHILE', 'PERU','MALAYSIA','SOUTH KOREA','MEXICO'])]
+CombinedPowerData = CombinedPowerData.loc[CombinedPowerData['COUNTRY'].isin(APEC_economies)]
+CombinedPowerData = CombinedPowerData[Platt_data]
 
 ## David notes:
 # I didn't run this part yet, but let's be careful about dropping missing data just yet
@@ -47,7 +52,7 @@ CombinedPowerData = CombinedPowerData.loc[CombinedPowerData['COUNTRY'].isin(['AU
 CombinedPowerData = CombinedPowerData[pd.notnull(CombinedPowerData['MW'])]
 
 # write APEC Platts data to csv file
-CombinedPowerData.to_csv(r'Platts\data\APECPlatts.csv', index=False)
+CombinedPowerData.to_csv(r'Platts\data\results\APECPlatts.csv', index=False)
 
 # end of script
 print("\nFINISHED. -- Current date/time:", dt.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
