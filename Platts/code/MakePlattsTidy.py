@@ -29,6 +29,7 @@ for key, value in paths.items():
 # create a list of APEC economies that are available from the Platts database, except Hong Kong that is incorporated in China 
 Platt_data = ['COUNTRY', 'UTYPE', 'MW', 'YEAR', 'STATUS', 'ELECTYPE', 'FUEL', 'ALTFUEL', 'BOILTYPE', 'TURBTYPE', 'GENTYPE', 'STYPE', 'PARTCTL', 'SO2CTL', 'NOXCTL', 'RETIRE']
 APEC_economies = ['AUSTRALIA', 'BRUNEI', 'CHINA', 'INDONESIA', 'JAPAN', 'PAPUA NEW GUINEA', 'SINGAPORE', 'THAILAND', 'TAIWAN', 'VIETNAM', 'CANADA', 'PHILIPPINES', 'USA', 'RUSSIA', 'NEW ZEALAND', 'CHILE', 'PERU','MALAYSIA','SOUTH KOREA','MEXICO']
+
 #Select power data from Platts database by choosing 16 out of 45 columns
 RawPowerDataAsia = pd.read_csv(r'Platts\data\MI_WorldElectricPowerPlants_Asia_March2019_v1.csv', skiprows=3, usecols=Platt_data)
 RawPowerDataNAmerica = pd.read_csv(r'Platts\data\MI_WorldElectricPowerPlants_NorthAmerica_March2019_v1.csv', skiprows=3, usecols=Platt_data)
