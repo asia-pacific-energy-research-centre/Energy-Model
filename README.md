@@ -1,7 +1,6 @@
 # Energy-Model
 
-## IMPORTANT
-***Remember to create your own branch before you start making edits!!!***
+***IMPORTANT: do not make edits to the `development` branch***
 
 How to use and make edits:
 1. In GitHub Desktop, create a new branch - *do not make changes to 'development'!*
@@ -11,25 +10,28 @@ How to use and make edits:
 5. If there are no issues, the changes will be merged.
 
 ## Folder contents
-Folders are structured by type of analysis:
-1. Macro
-2. EGEDA
-3. Demand
+Folders are structured by type:
+1. Data
+2. Code
+3. Results
+4. Reports
+5. Documentation
 
-#### 1. Macro
-This model supplies the GDP projections.
+### 1. Data
+- Data/raw: original (raw) datasets
+- Data/modified: intermediate data that has been transformed
+- Data/processed: Final, canonical datasets ready for modeling
 
-#### 2. EGEDA
-Historical data are sourced from [EGEDA](https://www.egeda.ewg.apec.org/). This folder contains scripts for mapping and aggregating the raw EGEDA data to the naming convention used by the models.
+### 2. Code
+- scripts to clean data
+- model code
+- commonly used functions
 
-#### 3. Demand
-End-use service demands are estimated for the following demand sectors:
-- Buildings
-- Industry
-- Transport
+### 3. Results
+- Final output of models that are ready for reporting
 
-#### Optimization
-OSeMOSYS will be added...
+### 4. Reports
+- Final table and figures
 
-## Requirements
-Scripts for data cleaning and manipulation are written in Python. The optimization (linear programs) are written in GAMS.
+### 5. Documentation
+- Manuals and documentation related to models and data (_Coming soon_)

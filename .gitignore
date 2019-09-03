@@ -1,29 +1,19 @@
 # do not track data files created during runs. 
 # These should be recreated when needed using the scripts.
-Demand*Models/Industry/data/modified/
-Demand*Models/Industry/data/results
 
-Demand*Models/Buildings/data/modified
-Demand*Models/Buildings/data/results
+# Directories to ignore:
+results/
+data/modified/
+data/processed/
+data/raw/Platts
 
-Demand*Models/Transport/data/modified
-Demand*Models/Transport/data/results
-
-EGEDA/results
-
-Platts/data/
-
-World*Bank/results
-
-Macro/data/modified
-Macro/data/results
-
+# Files and file types to ignore:
+*.xls
+*.xlsx
 *.png 
 .DS_Store
-
-# GAMS 
-## Do not track temp files:
 *.gpr
+*.gdx
 *.lst
 *.lxi
 *.~gm
@@ -32,27 +22,16 @@ Macro/data/results
 *.cmd
 *.~op
 *.log
+SelResults.csv
+task1.txt
 
-## do not track GDX or project files
-*.gpr
-*.gdx
-
-# VS Code
-## do not track project settings
+# Settings to ignore:
 *.vscode
 
-# Excel. do not track Excel workbooks unless explicitly told
-*.xlsx
+# Files to include:
 #!sector_data.xlsx
 !GDP_8th_2019_07_02.xlsx
 !Population_8th_2019_07_02.xlsx
-
-# OSeMOSYS files
-## do not save OSeMOSYS results
-SelResults.csv
-
-## do not save task list (used for reading in parameters from Excel)
-task1.txt
 
 # PyCharm settings
 .idea
