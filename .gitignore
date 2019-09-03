@@ -8,6 +8,7 @@ data/processed/
 data/raw/Platts
 
 # Files and file types to ignore:
+*.xls
 *.xlsx
 *.png 
 .DS_Store
