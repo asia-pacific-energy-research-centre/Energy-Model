@@ -40,6 +40,8 @@ CombinedPowerData = pd.concat([RawPowerDataAsia, RawPowerDataNAmerica, RawPowerD
 
 # Select only APEC economies except for Hong Kong which may be included in the CHINA data
 CombinedPowerData = CombinedPowerData.loc[CombinedPowerData['COUNTRY'].isin(APEC_economies)]
+
+# Reorganise the results columns to follow the order in the Platt-data
 CombinedPowerData = CombinedPowerData[Platt_data]
 
 ## David notes:
